@@ -1,0 +1,7 @@
+// make header white, use PAHMA colors for some defaults
+$navbar-inverse-bg: #fff;
+$navbar-inverse-border: #fff;
+$brand-primary: #22348D;
+$state-success-text:  #1d2c78 !default;
+$state-success-bg: #1d2c78 !default;
+$state-success-bg: lighten($brand-primary, 60%);
