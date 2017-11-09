@@ -234,7 +234,7 @@ module Blacklight::CatalogHelperBehavior
   def thumbnail_url document
     if document.has? blacklight_config.view_config(document_index_view_type).thumbnail_field
       #document.first(blacklight_config.view_config(document_index_view_type).thumbnail_field)
-      'https://webapps.cspace.berkeley.edu/pahma/imageserver/blobs/' + document.first(blacklight_config.view_config(document_index_view_type).thumbnail_field) + '/derivatives/Thumbnail/content'
+      'https://webapps.cspace.berkeley.edu/#TENANT#/imageserver/blobs/' + document.first(blacklight_config.view_config(document_index_view_type).thumbnail_field) + '/derivatives/Thumbnail/content'
     end
   end
 

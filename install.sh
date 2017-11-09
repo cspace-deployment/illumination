@@ -11,6 +11,9 @@ cd
 rails new ${app_name} -m https://raw.github.com/projectblacklight/blacklight/master/template.demo.rb
 
 source_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+perl -i -pe "s/#TENANT#/${WEBAPP}/g" ${source_dir}/*
+
 cd ${app_name}
 
 cp ${source_dir}/Gemfile .
@@ -31,9 +34,11 @@ rails g blacklight_gallery:install
 # additional customization of templates and css
 cp ${source_dir}/*.svg public/
 cp ${source_dir}/*.png public/
+cp ${source_dir}/header-logo-${tenant}.png public/header-logo.png
 mkdir -p app/views/shared
 cp ${source_dir}/_header_navbar.html.erb app/views/shared/
 cp ${source_dir}/_footer.html.erb app/views/shared/
+cp ${source_dir}/_splash.html.erb app/views/shared/
 mkdir -p app/views/catalog/
 cp ${source_dir}/_home_text.html.erb app/views/catalog/
 cp ${source_dir}/_search_form.html.erb app/views/catalog/
