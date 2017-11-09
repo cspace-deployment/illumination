@@ -1,18 +1,31 @@
-set -e
+#set -e
 tenant=$1
 app_name=$2
+portal_config_file=$3
+
 if [ -e "${app_name}" ]; then
   echo "Target directory ${app_name} already exists; please remove first."
-  echo "$0 tenant app_name"
+  echo "$0 tenant app_name portal_config_file"
+  exit
+fi
+
+if [ ! -f "${portal_config_file}" ]; then
+  echo "Can't find ${portal_config_file}. Please verify name and location"
+  echo "$0 tenant app_name portal_config_file"
   exit
 fi
 
 cd
 rails new ${app_name} -m https://raw.github.com/projectblacklight/blacklight/master/template.demo.rb
 
-source_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/src"
 
-perl -i -pe "s/#TENANT#/${WEBAPP}/g" ${source_dir}/*
+perl -i -pe "s/#TENANT#/${tenant}/g" ${source_dir}/*
+
+python ${source_dir}/../ucb_bl.py ${portal_config_file} > bl_config.txt
+
+# configure BL using existing Portal config file
+cat ${source_dir}/catalog_controller.template bl_config.txt > ${source_dir}/catalog_controller.rb
 
 cd ${app_name}
 
@@ -39,6 +52,10 @@ mkdir -p app/views/shared
 cp ${source_dir}/_header_navbar.html.erb app/views/shared/
 cp ${source_dir}/_footer.html.erb app/views/shared/
 cp ${source_dir}/_splash.html.erb app/views/shared/
+
+cp ${source_dir}/${tenant}_header_navbar.html.erb app/views/shared/
+cp ${source_dir}/${tenant}_footer.html.erb app/views/shared/
+cp ${source_dir}/${tenant}_splash.html.erb app/views/shared/
 mkdir -p app/views/catalog/
 cp ${source_dir}/_home_text.html.erb app/views/catalog/
 cp ${source_dir}/_search_form.html.erb app/views/catalog/
