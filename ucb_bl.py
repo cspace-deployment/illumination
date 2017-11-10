@@ -201,3 +201,8 @@ for section in bl_config:
     print '# %s' % section
     for c in sorted(bl_config[section]):
         print c
+
+print '''
+  end
+end
+'''

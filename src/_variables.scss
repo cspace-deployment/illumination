@@ -14,6 +14,7 @@ $state-success-bg: lighten($brand-primary, 60%);
   ul {
     margin-top: 10px;
     list-style: none;
+    padding-left: 0px;
     li + li {
       margin-top: 20px;
     }
@@ -23,8 +24,16 @@ $state-success-bg: lighten($brand-primary, 60%);
         text-decoration: none;
         font-weight: bold;
         color: white;
+        font-size: 1.5rem;
       }
     }
   }
 }
 
+.social ul>li {
+  display: inline-block;
+}
+.social ul>li>a {
+  font-size: 3.2rem;
+  margin-right: 30px;
+}

@@ -44,6 +44,9 @@ bin/spring stop
 rails g blacklight_advanced_search:install
 rails g blacklight_gallery:install
 
+# stop the troublesome spring server again, for now
+bin/spring stop
+
 # additional customization of templates and css
 cp ${source_dir}/*.svg public/
 cp ${source_dir}/*.png public/
@@ -61,6 +64,7 @@ cp ${source_dir}/_home_text.html.erb app/views/catalog/
 cp ${source_dir}/_search_form.html.erb app/views/catalog/
 
 cp ${source_dir}/_variables.scss app/assets/stylesheets/
+cp ${source_dir}/${tenant}_variables.scss app/assets/stylesheets/
 cp ${source_dir}/blacklight.scss app/assets/stylesheets/
 
 # a useful script for saving back modifications to source repo

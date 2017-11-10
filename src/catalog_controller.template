@@ -195,5 +195,6 @@ class CatalogController < ApplicationController
     # Configuration for autocomplete suggestor
     config.autocomplete_enabled = true
     config.autocomplete_path = 'suggest'
-  end
-end
+# NB: the following two ends are added by the ucb_bl.py script...
+#  end
+#end
