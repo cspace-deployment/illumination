@@ -57,19 +57,19 @@ cp ${source_dir}/_header_navbar.html.erb app/views/shared/
 cp ${source_dir}/_footer.html.erb app/views/shared/
 cp ${source_dir}/_splash.html.erb app/views/shared/
 
-cp ${source_dir}/${tenant}_header_navbar.html.erb app/views/shared/
-cp ${source_dir}/${tenant}_footer.html.erb app/views/shared/
-cp ${source_dir}/${tenant}_splash.html.erb app/views/shared/
+cp ${source_dir}/${tenant}_header_navbar.html.erb app/views/shared/_header_navbar.html.erb
+cp ${source_dir}/${tenant}_footer.html.erb app/views/shared/_footer.html.erb
+cp ${source_dir}/${tenant}_splash.html.erb app/views/shared/_splash.html.erb
 
 mkdir -p app/views/catalog/
 cp ${source_dir}/_home_text.html.erb app/views/catalog/
 cp ${source_dir}/_search_form.html.erb app/views/catalog/
 
-cp ${source_dir}/${tenant}_home_text.html.erb app/views/catalog/
-cp ${source_dir}/${tenant}_search_form.html.erb app/views/catalog/
+cp ${source_dir}/${tenant}_home_text.html.erb app/views/catalog/_home_text.html.erb
+cp ${source_dir}/${tenant}_search_form.html.erb app/views/catalog/_home_text.html.erb
 
 cp ${source_dir}/_variables.scss app/assets/stylesheets/
-cp ${source_dir}/${tenant}_variables.scss app/assets/stylesheets/
+cp ${source_dir}/${tenant}_variables.scss app/assets/stylesheets/_variables.scss
 
 cp ${source_dir}/blacklight.scss app/assets/stylesheets/
 
