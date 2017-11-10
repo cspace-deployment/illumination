@@ -51,6 +51,7 @@ bin/spring stop
 cp ${source_dir}/*.svg public/
 cp ${source_dir}/*.png public/
 cp ${source_dir}/header-logo-${tenant}.png public/header-logo.png
+
 mkdir -p app/views/shared
 cp ${source_dir}/_header_navbar.html.erb app/views/shared/
 cp ${source_dir}/_footer.html.erb app/views/shared/
@@ -59,16 +60,21 @@ cp ${source_dir}/_splash.html.erb app/views/shared/
 cp ${source_dir}/${tenant}_header_navbar.html.erb app/views/shared/
 cp ${source_dir}/${tenant}_footer.html.erb app/views/shared/
 cp ${source_dir}/${tenant}_splash.html.erb app/views/shared/
+
 mkdir -p app/views/catalog/
 cp ${source_dir}/_home_text.html.erb app/views/catalog/
 cp ${source_dir}/_search_form.html.erb app/views/catalog/
 
+cp ${source_dir}/${tenant}_home_text.html.erb app/views/catalog/
+cp ${source_dir}/${tenant}_search_form.html.erb app/views/catalog/
+
 cp ${source_dir}/_variables.scss app/assets/stylesheets/
 cp ${source_dir}/${tenant}_variables.scss app/assets/stylesheets/
+
 cp ${source_dir}/blacklight.scss app/assets/stylesheets/
 
 # a useful script for saving back modifications to source repo
-cp ${source_dir}/save.sh .
+cp ${source_dir}/../save.sh .
 
 echo
 echo "********************************************************************"
