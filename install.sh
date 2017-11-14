@@ -50,6 +50,7 @@ bin/spring stop
 # additional customization of templates and css
 cp ${source_dir}/*.svg public/
 cp ${source_dir}/*.png public/
+cp -r ${source_dir}/fonts public/
 cp ${source_dir}/header-logo-${tenant}.png public/header-logo.png
 
 mkdir -p app/views/shared
@@ -66,7 +67,7 @@ cp ${source_dir}/_home_text.html.erb app/views/catalog/
 cp ${source_dir}/_search_form.html.erb app/views/catalog/
 
 cp ${source_dir}/${tenant}_home_text.html.erb app/views/catalog/_home_text.html.erb
-cp ${source_dir}/${tenant}_search_form.html.erb app/views/catalog/_home_text.html.erb
+cp ${source_dir}/${tenant}_search_form.html.erb app/views/catalog/_search_form.html.erb
 
 cp ${source_dir}/_variables.scss app/assets/stylesheets/
 cp ${source_dir}/${tenant}_variables.scss app/assets/stylesheets/_variables.scss
