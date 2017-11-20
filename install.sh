@@ -41,8 +41,9 @@ bundle update
 # stop the troublesome spring server, for now
 bin/spring stop
 
-rails g blacklight_advanced_search:install
-rails g blacklight_gallery:install
+rails generate blacklight_range_limit:install
+rails generate blacklight_advanced_search:install
+rails generate blacklight_gallery:install
 
 # stop the troublesome spring server again, for now
 bin/spring stop
