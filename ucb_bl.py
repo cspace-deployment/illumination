@@ -189,7 +189,7 @@ if __name__ == "__main__":
                 limit = ', limit: true'
             if '_dt' in solr_field:
                 bl_config[bl_field][ '''
-                facet_field "%s", :label => "%s", :partial => "blacklight_range_limit/range_limit_panel", :range => {
+                config.add_facet_field "%s", :label => "%s", :partial => "blacklight_range_limit/range_limit_panel", :range => {
                       :input_label_range_begin => "from year",
                       :input_label_range_end => "to year"
                 }
