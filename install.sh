@@ -15,7 +15,6 @@ if [ ! -f "${portal_config_file}" ]; then
   exit
 fi
 
-cd
 rails new ${app_name} -m https://raw.github.com/projectblacklight/blacklight/master/template.demo.rb
 
 source_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/src"
@@ -58,6 +57,8 @@ mkdir -p app/views/shared
 cp ${source_dir}/_header_navbar.html.erb app/views/shared/
 cp ${source_dir}/_footer.html.erb app/views/shared/
 cp ${source_dir}/_splash.html.erb app/views/shared/
+
+cp ${source_dir}/${tenant}_catalog_controller.rb app/controllers/catalog_controller.rb
 
 cp ${source_dir}/${tenant}_header_navbar.html.erb app/views/shared/_header_navbar.html.erb
 cp ${source_dir}/${tenant}_footer.html.erb app/views/shared/_footer.html.erb
