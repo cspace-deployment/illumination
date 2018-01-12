@@ -1,10 +1,14 @@
 # illumination
 Blacklight customizations for UC Berkeley
 
-Not much of a How To yet! Sorry!
+Just exactly the files needed to deploy into an existing vanilla BL installation to make it work for the various UCB "museum portals".
 
-Try the following, assuming you have installed all the RoR and Solr prerequisites. Probably it is easiest to first
-install a "vanilla" Blacklight deployment, then try the ```illumination``` code below.
+_Caveat utilizator!_ This is all fresh and wet behind the gills!
+
+# Prerequisites
+
+First, you must have have installed all the RoR and Solr prerequisites. Probably it is easiest to first
+install and run a "vanilla" Blacklight deployment, then try the ```illumination``` further code below.
 
 See the Blacklight documentation:
 
@@ -16,33 +20,34 @@ http://projectblacklight.org/
 
 To install the rickety PAHMA customizations:
 
-First, you'll need to be inside the Berkeley firewall or have access via the VPN (the Solr server for the PAHMA Public Portal is not available to the outside world. So, start that up if needed.
+_NB: you'll need to be inside the Berkeley firewall or have access via the VPN (the Solr server for the 
+PAHMA Public Portal is not available to the outside world. So, start your VPN client up if needed._
 
 ```
 cd <where_you_want_to_install_blacklight>
 ```
 
-Get the two repos you’ll need...
+1. Get the two repos you’ll need...
 
 ```
 git clone https://github.com/jblowe/illumination.git
 git clone https://github.com/cspace-deployment/django_example_config.git
 ```
 
-Now run the script to install BL and customize for PAHMA
+2. Run the script to install BL and customize for PAHMA
 
 NB: 
 
-1. you’ll be asked in the middle of this to resolve a conflict:
+a. you’ll be asked in the middle of this to resolve a conflict:
 
 ```
    conflict  app/controllers/search_history_controller.rb
 Overwrite /Users/jblowe/search_pahma/app/controllers/search_history_controller.rb? (enter "h" for help) [Ynaqdh] 
 ```
 
-(I’m not sure it matters what you answer at the moment...
+(I’m not sure it matters what you answer at the moment...)
 
-2. You’ll be asked about installing a local search form. Say y.
+b. You’ll be asked about installing a local search form. Say y.
 
 ```
 Install local search form with advanced link? (y/N) y
@@ -59,6 +64,7 @@ e.g.
 ```
 ./illumination/install.sh pahma search_pahma django_example_config/pahma/config/pahmapublicparms.csv 
 
+[...]
 ********************************************************************
 new blacklight app customized for pahma created in ~/search_pahma.
 to start it up in development:
@@ -69,7 +75,7 @@ to start it up in development:
 then visit https://localhost:3000 to test
 ********************************************************************
 ```
-Do as it says:
+3. Do as it says:
 
 ```
 cd search_pahma
