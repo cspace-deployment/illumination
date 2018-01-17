@@ -1,4 +1,5 @@
 #set -e
+set -x
 tenant=$1
 app_name=$2
 portal_config_file=$3
@@ -32,8 +33,10 @@ cp ${source_dir}/Gemfile .
 cp ${source_dir}/blacklight.yml config/
 cp ${source_dir}/blacklight.en.yml config/locales/
 cp ${source_dir}/development.rb config/environments/
+diff ${source_dir}/catalog_controller.rb app/controllers/catalog_controller.rb
 cp ${source_dir}/catalog_controller.rb app/controllers/
 mkdir -p app/helpers/blacklight
+diff ${source_dir}/catalog_helper_behavior.rb app/helpers/blacklight/
 cp ${source_dir}/catalog_helper_behavior.rb app/helpers/blacklight/
 
 bundle update
@@ -58,6 +61,7 @@ cp ${source_dir}/_header_navbar.html.erb app/views/shared/
 cp ${source_dir}/_footer.html.erb app/views/shared/
 cp ${source_dir}/_splash.html.erb app/views/shared/
 
+diff ${source_dir}/${tenant}_catalog_controller.rb app/controllers/catalog_controller.rb
 cp ${source_dir}/${tenant}_catalog_controller.rb app/controllers/catalog_controller.rb
 
 cp ${source_dir}/${tenant}_header_navbar.html.erb app/views/shared/_header_navbar.html.erb
