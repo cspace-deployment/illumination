@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #set -e
 set -x
 tenant=$1
@@ -19,6 +20,10 @@ fi
 rails new ${app_name} -m https://raw.github.com/projectblacklight/blacklight/master/template.demo.rb
 
 source_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/src"
+
+cd {source_dir}
+git clean -fd
+git checkout -- src/*
 
 perl -i -pe "s/#TENANT#/${tenant}/g" ${source_dir}/*
 

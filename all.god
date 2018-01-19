@@ -1,8 +1,13 @@
 #
+# hasty god script to monitor the ucb apps
+#
 # pahma 3000
+# ucjeps 3001
 # bampfa 3002
 # botgarden 3003
-# ucjeps 3001
+#
+# TODO: mebbe consider make this whole thing one loop...
+#
 
 RAILS_ROOT = "/home/ubuntu/search_pahma"
 PORT = "3000"
