@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class CatalogController < ApplicationController
-# frozen_string_literal: true
-class CatalogController < ApplicationController
 
   include BlacklightAdvancedSearch::Controller
   include Blacklight::Catalog
@@ -13,8 +11,8 @@ class CatalogController < ApplicationController
     config.view.masonry.partials = [:index]
     config.view.slideshow.partials = [:index]
 
-    config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
-    config.show.partials.insert(1, :openseadragon)
+    #config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
+    #config.show.partials.insert(1, :openseadragon)
     # default advanced config values
     config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
     # config.advanced_search[:qt] ||= 'advanced'

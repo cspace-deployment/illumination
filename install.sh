@@ -38,6 +38,7 @@ cp ${source_dir}/Gemfile .
 cp ${source_dir}/blacklight.yml config/
 cp ${source_dir}/blacklight.en.yml config/locales/
 cp ${source_dir}/development.rb config/environments/
+cp ${source_dir}/application_helper.rb app/helpers/
 diff ${source_dir}/catalog_controller.rb app/controllers/catalog_controller.rb
 cp ${source_dir}/catalog_controller.rb app/controllers/
 mkdir -p app/helpers/blacklight
