@@ -17,7 +17,7 @@ class CatalogController < ApplicationController
     config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
     # config.advanced_search[:qt] ||= 'advanced'
     config.advanced_search[:url_key] ||= 'advanced'
-    config.advanced_search[:query_parser] ||= 'dismax'
+    config.advanced_search[:query_parser] ||= 'edismax'
     config.advanced_search[:form_solr_parameters] ||= {}
 
     ## Class for sending and receiving requests from a search index
@@ -295,35 +295,37 @@ class CatalogController < ApplicationController
     config.add_show_field 'objdimensions_ss', label: 'Dimensions'
     config.add_show_field 'objtitle_s', label: 'Title'
     config.add_show_field 'objcomment_s', label: 'Comment'
+    config.add_show_field 'blob_ss', helper_method: 'render_media', label: 'Images'
+    config.add_show_field 'card_ss', helper_method: 'render_media', label: 'Catalog Cards'
     #config.add_show_field 'objpersondepicted_ss', label: 'Person Depicted', limit: true
     #config.add_show_field 'objplacedepicted_ss', label: 'Person Depicted', limit: true
     
     # facet
-    config.add_facet_field 'objname_s', label: 'Object Name', limit: true
-    config.add_facet_field 'objtype_s', label: 'Object Type', limit: true
-    config.add_facet_field 'objfcptree_ss', label: 'Collection Place', limit: true
-    config.add_facet_field 'objcolldate_begin_i', label: 'Collection Year', range: true
-    config.add_facet_field 'objcollector_ss', label: 'Collector', limit: true
-    config.add_facet_field 'anonymousdonor_ss', label: 'Donor', limit: true
-    config.add_facet_field 'objassoccult_ss', label: 'Culture or Time period', limit: true
-    config.add_facet_field 'objmaker_ss', label: 'Maker / Artist'
-    config.add_facet_field 'objmaterials_ss', label: 'Materials', limit: true
+    config.add_facet_field 'objname_s', label: 'Object Name', limit: true, index_range: true
+    config.add_facet_field 'objtype_s', label: 'Object Type', limit: true, index_range: true
+    config.add_facet_field 'objfcptree_ss', label: 'Collection Place', limit: true, index_range: true
+    config.add_facet_field 'objcolldate_begin_i', label: 'Collection Year', range: true, index_range: true
+    config.add_facet_field 'objcollector_ss', label: 'Collector', limit: true, index_range: true
+    config.add_facet_field 'anonymousdonor_ss', label: 'Donor', limit: true, index_range: true
+    config.add_facet_field 'objassoccult_ss', label: 'Culture or Time period', limit: true, index_range: true
+    config.add_facet_field 'objmaker_ss', label: 'Maker / Artist', index_range: true
+    config.add_facet_field 'objmaterials_ss', label: 'Materials', limit: true, index_range: true
     config.add_facet_field 'hasimages_s', label: 'Has image(s)?'
     config.add_facet_field 'hascoords_s', label: 'Has coordinates?'
     config.add_facet_field 'imagetype_ss', label: 'Image Type'
     
     # subject to further review (and in some cases, implementation)
-    config.add_facet_field 'objaccno_ss', label: 'Accession Number', limit: true
-    #config.add_facet_field 'taxon_s', label: 'Taxon', limit: true
-    config.add_facet_field 'objpp_ss', label: 'Production Place', limit: true
-    #config.add_facet_field 'objproddate_begin_i', label: 'Production Year', range: true
-    config.add_facet_field 'objacqdate_ss', label: 'Acquisition Date', limit: true
-    config.add_facet_field 'objaccdate_ss', label: 'Accession Date', limit: true
+    config.add_facet_field 'objaccno_ss', label: 'Accession Number', limit: true, index_range: true
+    #config.add_facet_field 'taxon_s', label: 'Taxon', limit: true, index_range: true
+    config.add_facet_field 'objpp_ss', label: 'Production Place', limit: true, index_range: true
+    #config.add_facet_field 'objproddate_begin_i', label: 'Production Year', range: true, index_range: true
+    config.add_facet_field 'objacqdate_ss', label: 'Acquisition Date', limit: true, index_range: true
+    config.add_facet_field 'objaccdate_ss', label: 'Accession Date', limit: true, index_range: true
     config.add_facet_field 'objfilecode_ss', label: 'Ethnographic File Code', limit: true
-    config.add_facet_field 'objkeelingser_s', label: 'Keeling series', limit: true
+    config.add_facet_field 'objkeelingser_s', label: 'Keeling series', limit: true, index_range: true
     config.add_facet_field 'objdept_s', label: 'Department', limit: true
-    #config.add_facet_field 'objpersondepicted_ss', label: 'Person Depicted', limit: true
-    #config.add_facet_field 'objplacedepicted_ss', label: 'Person Depicted', limit: true
+    #config.add_facet_field 'objpersondepicted_ss', label: 'Person Depicted', limit: true, index_range: true
+    #config.add_facet_field 'objplacedepicted_ss', label: 'Person Depicted', limit: true, index_range: true
     # gallery
   end
 end
