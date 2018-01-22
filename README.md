@@ -1,14 +1,14 @@
 # illumination
-Blacklight customizations for UC Berkeley
+Blacklight customizations for UC Berkeley.
 
 Just exactly the files needed to deploy into an existing vanilla BL installation to make it work for the various UCB "museum portals".
 
 _Caveat utilizator!_ This is all fresh and wet behind the gills!
 
-# Prerequisites
+## Prerequisites
 
 First, you must have have installed all the RoR and Solr prerequisites. Probably it is easiest to first
-install and run a "vanilla" Blacklight deployment, then try the ```illumination``` further code below.
+install and run a "vanilla" Blacklight deployment, then try the ```illumination``` code described below.
 
 See the Blacklight documentation:
 
@@ -16,12 +16,12 @@ https://github.com/projectblacklight/blacklight/wiki/Quickstart
 
 http://projectblacklight.org/
 
-# Installation
+## Installation
 
 To install the rickety PAHMA customizations:
 
 _NB: you'll need to be inside the Berkeley firewall or have access via the VPN (the Solr server for the 
-PAHMA Public Portal is not available to the outside world. So, start your VPN client up if needed._
+PAHMA Public Portal is not available to the outside world). So, start your VPN client up if needed._
 
 ```
 cd <where_you_want_to_install_blacklight>
@@ -36,7 +36,7 @@ git clone https://github.com/cspace-deployment/django_example_config.git
 
 2. Run the script to install BL and customize for PAHMA
 
-NB: 
+_**NB before you kick off the install script:**_ 
 
 a. you’ll be asked in the middle of this to resolve a conflict:
 
@@ -53,7 +53,7 @@ b. You’ll be asked about installing a local search form. Say y.
 Install local search form with advanced link? (y/N) y
 ```
 
-The install script takes 3 arguments: 
+c. OK, now do the install. The install script takes 3 arguments: 
 
 ```
 ./illumination/install.sh tenant app_name portal_config_file
@@ -101,11 +101,11 @@ or
 
 http://localhost:3000/?utf8=%E2%9C%93&search_field=objmusno_s&q=%221-1000%22
 
-# Important Caveats
+## Important Caveats
 
 * This deployment expects to be able to access the public PAHMA Solr server at:
 
-https://webapps-dev.cspace.berkeley.edu/solr/pahma-public
+  https://webapps-dev.cspace.berkeley.edu/solr/pahma-public
 
 * If you are doing development that requires a different Solr server, you'll need to update that in ```config/blacklight.yml```.
 
@@ -113,10 +113,25 @@ Typically, you'll want your own Solr server, with your own data, running on loca
 
 To do this, you'll need to:
 
-1. Install Solr (we are using Solr4 at the moment, alas)
+1. Install Solr (we are using Solr5 at the moment, alas)
 2. Configure Solr for the ```pahma-public``` core (see below for how to do this).
 3. Start it up.
 4. Load some test data. (Some or all of the PAHMA public data extract, contact jblowe@berkeley.edu to get this file.)
 
 * Caveat Utilizator: many BL and other features are not working correctly at the moment; see the UCB JIRAs for details.
 
+## Install a local Solr5 server
+
+The Solr server used for the UCB BL deployments
+
+## Monitoring with god
+
+On EC2, the RoR services are being monitored using ```god```.
+
+In this repo there is a file called ```howto-ec2.txt``` which shows how
+to configure an EC2 instance with the UCB demo portals and ```god```.
+
+Note that while this description pertains to a server serving all 5 UCB portals, 
+it currently focuses on the PAHMA deployment.
+
+Please refer to this file for the basics on how to set things up.

@@ -1,0 +1,29 @@
+# 
+# what i did to install the blacklight demos on ec2
+#
+# first, sign in to the instance, e.g.
+# ssh -i rit_pahma_blacklight.pem ubuntu@ec2-35-166-93-178.us-west-2.compute.amazonaws.com
+#
+# upgrade this server
+sudo do-release-upgrade
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt install ruby-god
+#
+# need these two repos
+# 1. current portal configuration lives here
+git clone https://github.com/cspace-deployment/django_example_config.git
+# 2. ucb blacklight customizations. a hack!
+git clone https://github.com/jblowe/illumination.git
+#
+# install all ucb demo bl sites
+./illumination/install-all-ucb-bl.sh
+#
+# start god
+god -c illumination/all.god
+# for now, stop all deployments except pahma
+god stop
+got start pahma
+god status
+#
+# now check, e.g. http://ec2-35-166-93-178.us-west-2.compute.amazonaws.com:3000
