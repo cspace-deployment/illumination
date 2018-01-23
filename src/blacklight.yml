@@ -15,7 +15,7 @@ development:
   #url: <%= ENV['SOLR_URL'] || "http://127.0.0.1:8983/solr/#TENANT#-public" %>
   url: <%= ENV['SOLR_URL'] || "https://webapps-dev.cspace.berkeley.edu/solr/#TENANT#-public" %>
   #url: <%= ENV['SOLR_URL'] || "https://apis.berkeley.edu/uat/cspace/v1/artifacts/#TENANT#-public" %>
-  # "app_id: 88cb7dd8"  "app_key: 78a6b4d2ece51508c0ef2f151a0c2d68"
+  # "app_id: 99999999"  "app_key: 9999999999999999999"
 test: &test
   adapter: solr
   url: <%= ENV['SOLR_URL'] || "http://127.0.0.1:#{ENV['TEST_JETTY_PORT'] || 8983}/solr/#TENANT#-public" %>
