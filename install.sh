@@ -42,8 +42,10 @@ cp ${source_dir}/development.rb config/environments/
 cp ${source_dir}/application_helper.rb app/helpers/
 diff ${source_dir}/catalog_controller.rb app/controllers/catalog_controller.rb
 cp ${source_dir}/catalog_controller.rb app/controllers/
+cp ${source_dir}/search_history_controller.rb app/controllers/
+
 mkdir -p app/helpers/blacklight
-diff ${source_dir}/catalog_helper_behavior.rb app/helpers/blacklight/
+# diff ${source_dir}/catalog_helper_behavior.rb app/helpers/blacklight/
 cp ${source_dir}/catalog_helper_behavior.rb app/helpers/blacklight/
 
 bundle update
@@ -68,8 +70,9 @@ cp ${source_dir}/_header_navbar.html.erb app/views/shared/
 cp ${source_dir}/_footer.html.erb app/views/shared/
 cp ${source_dir}/_splash.html.erb app/views/shared/
 
-diff ${source_dir}/${tenant}_catalog_controller.rb app/controllers/catalog_controller.rb
+# diff ${source_dir}/${tenant}_catalog_controller.rb app/controllers/catalog_controller.rb
 cp ${source_dir}/${tenant}_catalog_controller.rb app/controllers/catalog_controller.rb
+cp ${source_dir}/${tenant}_search_history_controller.rb app/controllers/search_history_controller.rb
 
 cp ${source_dir}/${tenant}_header_navbar.html.erb app/views/shared/_header_navbar.html.erb
 cp ${source_dir}/${tenant}_footer.html.erb app/views/shared/_footer.html.erb
