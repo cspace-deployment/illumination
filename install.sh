@@ -21,7 +21,7 @@ rails new ${app_name} -m https://raw.github.com/projectblacklight/blacklight/mas
 
 source_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/src"
 
-cd {source_dir}
+cd ${source_dir}
 git clean -fd
 git checkout -- src/*
 
