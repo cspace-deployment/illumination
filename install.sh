@@ -4,8 +4,10 @@ set -x
 tenant=$1
 app_name=$2
 portal_config_file=$3
+current_directory=`pwd`
+echo "pwd = ${current_directory}"
 
-if [ -e "${app_name}" ]; then
+if [ -d "${app_name}" ]; then
   echo "Target directory ${app_name} already exists; please remove first."
   echo "$0 tenant app_name portal_config_file"
   exit
@@ -22,8 +24,9 @@ rails new ${app_name} -m https://raw.github.com/projectblacklight/blacklight/mas
 source_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/src"
 
 cd ${source_dir}
+echo "Getting Blacklight custom code from from" `pwd`
 git clean -fd
-git checkout -- src/*
+git checkout -- *
 
 perl -i -pe "s/#TENANT#/${tenant}/g" ${source_dir}/*
 
@@ -32,7 +35,10 @@ python ${source_dir}/../ucb_bl.py ${portal_config_file} > bl_config.txt
 # configure BL using existing Portal config file
 cat ${source_dir}/catalog_controller.template bl_config.txt > ${source_dir}/catalog_controller.rb
 
+cd ${current_directory}
 cd ${app_name}
+
+echo "Customizing Blacklight app in" `pwd`
 
 cp ${source_dir}/Gemfile .
 cp ${source_dir}/blacklight.yml config/
