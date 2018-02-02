@@ -56,13 +56,13 @@ Install local search form with advanced link? (y/N) y
 c. OK, now do the install. The install script takes 3 arguments: 
 
 ```
-./illumination/install.sh tenant app_name portal_config_file
+./illumination/install.sh tenant app_name absolute_path_to_portal_config_file
 ```
 
 e.g.
 
 ```
-./illumination/install.sh pahma search_pahma django_example_config/pahma/config/pahmapublicparms.csv 
+./illumination/install.sh pahma search_pahma ~/django_example_config/pahma/config/pahmapublicparms.csv 
 
 [...]
 ********************************************************************
