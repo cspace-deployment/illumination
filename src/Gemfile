@@ -74,4 +74,4 @@ gem 'blacklight-hierarchy'
 gem 'faraday'
 gem 'config'
 gem 'mods_display'
-gem 'font-awesome-rails
+gem 'font-awesome-rails'
