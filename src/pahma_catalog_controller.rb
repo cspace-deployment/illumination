@@ -233,7 +233,7 @@ class CatalogController < ApplicationController
     config.add_search_field 'objfilecode_ss', label: 'Function'
     config.add_search_field 'objcontextuse_s', label: 'Context of Use'
     config.add_search_field 'objproddate_s', label: 'Production date'
-    config.add_search_field 'objacqdate_ss', label: 'Acquisition date'
+    #config.add_search_field 'objacqdate_ss', label: 'Acquisition date'
     config.add_search_field 'objcolldate_s', label: 'Collection date'
     config.add_search_field 'objaccdate_ss', label: 'Accession date'
     config.add_search_field 'objkeelingser_s', label: 'Keeling series'
@@ -277,8 +277,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'objproddate_s', label: 'Production date'
     config.add_show_field 'objcolldate_s', label: 'Collection date'
     config.add_show_field 'objaccdate_ss', label: 'Accession date'
-    config.add_show_field 'objacqdate_ss', label: 'Acquisition date'
-    
+    #config.add_show_field 'objacqdate_ss', label: 'Acquisition date'
 
     config.add_show_field 'hasimages_s', label: 'Has image(s)?'
     config.add_show_field 'imagetype_ss', label: 'Image type'
@@ -321,9 +320,9 @@ class CatalogController < ApplicationController
     config.add_facet_field 'objaccno_ss', label: 'Accession number', limit: true, index_range: true
     #config.add_facet_field 'taxon_s', label: 'Taxon', limit: true, index_range: true
     config.add_facet_field 'objpp_ss', label: 'Production place', limit: true, index_range: true
-    #config.add_facet_field 'objproddate_begin_i', label: 'Production year', range: true, index_range: true
-    config.add_facet_field 'objacqdate_ss', label: 'Acquisition date', limit: true, index_range: true
-    config.add_facet_field 'objaccdate_ss', label: 'Accession date', limit: true, index_range: true
+    config.add_facet_field 'objproddate_begin_i', label: 'Production year', range: true, index_range: true
+    #config.add_facet_field 'objacqdate_ss', label: 'Acquisition date', limit: true, index_range: true
+    config.add_facet_field 'objaccdate_begin_i', label: 'Accession date', limit: true, index_range: true
     config.add_facet_field 'objfilecode_ss', label: 'Function', limit: true
     config.add_facet_field 'objkeelingser_s', label: 'Keeling series', limit: true, index_range: true
     config.add_facet_field 'objdept_s', label: 'Department', limit: true
