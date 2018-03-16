@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class CatalogController < ApplicationController
 
-  include BlacklightAdvancedSearch::Controller
+  #include BlacklightAdvancedSearch::Controller
   include Blacklight::Catalog
   include Blacklight::Marc::Catalog
   include BlacklightRangeLimit::ControllerOverride
