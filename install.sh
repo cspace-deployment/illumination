@@ -78,6 +78,8 @@ cp ${source_dir}/_header_navbar.html.erb app/views/shared/
 cp ${source_dir}/_footer.html.erb app/views/shared/
 cp ${source_dir}/_splash.html.erb app/views/shared/
 
+cp ${source_dir}/_user_util_links.html.erb app/views/
+
 # diff ${source_dir}/${tenant}_catalog_controller.rb app/controllers/catalog_controller.rb
 cp ${source_dir}/${tenant}_catalog_controller.rb app/controllers/catalog_controller.rb
 cp ${source_dir}/${tenant}_search_history_controller.rb app/controllers/search_history_controller.rb
