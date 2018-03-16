@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 class CatalogController < ApplicationController
 
-  include BlacklightAdvancedSearch::Controller
+  #include BlacklightAdvancedSearch::Controller
   include Blacklight::Catalog
   include Blacklight::Marc::Catalog
   include BlacklightRangeLimit::ControllerOverride
 
   configure_blacklight do |config|
+
+    config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
+    config.show.partials.insert(1, :openseadragon)
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
     # no slideshow until thumbnail rendering is fixed
@@ -241,7 +244,7 @@ class CatalogController < ApplicationController
     config.add_search_field 'objproddate_s', label: 'Production date'
     #config.add_search_field 'objacqdate_ss', label: 'Acquisition date'
     config.add_search_field 'objcolldate_s', label: 'Collection date'
-    config.add_search_field 'objaccdate_ss', label: 'Accession date'
+    #config.add_search_field 'objaccdate_ss', label: 'Accession date'
     config.add_search_field 'objkeelingser_s', label: 'Keeling series'
     
     config.add_search_field 'objdept_s', label: 'Department'
@@ -283,7 +286,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'objproddate_s', label: 'Production date'
     config.add_show_field 'objcolldate_s', label: 'Collection date'
     config.add_show_field 'objaccdate_ss', label: 'Accession date'
-    #config.add_show_field 'objacqdate_ss', label: 'Acquisition date'
+    config.add_show_field 'objacqdate_ss', label: 'Acquisition date'
 
     config.add_show_field 'hasimages_s', label: 'Photographed'
     config.add_show_field 'imagetype_ss', label: 'Image type'
@@ -311,7 +314,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'objname_s', label: 'Object name', limit: true, index_range: true
     config.add_facet_field 'objtype_s', label: 'Object type', limit: true, index_range: true
     config.add_facet_field 'objfcptree_ss', label: 'Collection place', limit: true, index_range: true
-    ##config.add_facet_field 'objcolldate_begin_i', label: 'Year collected', range: true, index_range: true
+    config.add_facet_field 'objcolldate_begin_i', label: 'Year collected', range: true, index_range: true
     config.add_facet_field 'objcollector_ss', label: 'Collector', limit: true, index_range: true
     config.add_facet_field 'anonymousdonor_ss', label: 'Donor', limit: true, index_range: true
     config.add_facet_field 'objassoccult_ss', label: 'Culture or time period', limit: true, index_range: true
@@ -327,8 +330,9 @@ class CatalogController < ApplicationController
     #config.add_facet_field 'taxon_s', label: 'Taxon', limit: true, index_range: true
     config.add_facet_field 'objpp_ss', label: 'Production place', limit: true, index_range: true
     ##config.add_facet_field 'objproddate_begin_i', label: 'Production year', range: true, index_range: true
-    #config.add_facet_field 'objacqdate_ss', label: 'Acquisition date', limit: true, index_range: true
-    ##config.add_facet_field 'objaccdate_begin_i', label: 'Accession date', limit: true, index_range: true
+    ##config.add_facet_field 'objacqdate_ss', label: 'Acquisition date', limit: true, index_range: true
+    config.add_facet_field 'objaccdate_begin_is', label: 'Accession year', range: true, index_range: true
+    ##config.add_facet_field 'objacqdate_begin_is', label: 'Acquisition year', range: true, index_range: true
     config.add_facet_field 'objfilecode_ss', label: 'Function', limit: true
     #config.add_facet_field 'objkeelingser_s', label: 'Keeling series', limit: true, index_range: true
     #config.add_facet_field 'objdept_s', label: 'Department', limit: true

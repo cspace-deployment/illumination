@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #set -e
-set -x
+#set -x
 tenant=$1
 app_name=$2
 portal_config_file=$3
@@ -42,12 +42,12 @@ echo "Customizing Blacklight app in" `pwd`
 
 cp ${source_dir}/Gemfile .
 cp ${source_dir}/blacklight.yml config/
-cp ${source_dir}/routes.rb config/
+#cp ${source_dir}/routes.rb config/
 cp ${source_dir}/blacklight.en.yml config/locales/
 cp ${source_dir}/blacklight_advanced_search.en.yml config/locales/
 cp ${source_dir}/development.rb config/environments/
 cp ${source_dir}/application_helper.rb app/helpers/
-diff ${source_dir}/catalog_controller.rb app/controllers/catalog_controller.rb
+# diff ${source_dir}/catalog_controller.rb app/controllers/catalog_controller.rb
 cp ${source_dir}/catalog_controller.rb app/controllers/
 cp ${source_dir}/search_history_controller.rb app/controllers/
 
@@ -60,8 +60,8 @@ bundle update
 bin/spring stop
 
 rails generate blacklight_range_limit:install
-rails generate blacklight_advanced_search:install
 rails generate blacklight_gallery:install
+#rails generate blacklight_advanced_search:install
 
 # stop the troublesome spring server again, for now
 bin/spring stop
@@ -69,6 +69,7 @@ bin/spring stop
 # additional customization of templates and css
 cp ${source_dir}/*.svg public/
 cp ${source_dir}/*.png public/
+cp ${source_dir}/splash_images/* public/
 cp -r ${source_dir}/fonts public/
 cp ${source_dir}/header-logo-${tenant}.png public/header-logo.png
 
@@ -96,9 +97,6 @@ cp ${source_dir}/_variables.scss app/assets/stylesheets/
 cp ${source_dir}/${tenant}_variables.scss app/assets/stylesheets/_variables.scss
 
 cp ${source_dir}/blacklight.scss app/assets/stylesheets/
-
-# a useful script for saving back modifications to source repo
-cp ${source_dir}/../save.sh .
 
 echo
 echo "********************************************************************"

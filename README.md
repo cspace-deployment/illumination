@@ -38,7 +38,7 @@ git clone https://github.com/cspace-deployment/django_example_config.git
 
 _**NB before you kick off the install script:**_ 
 
-a. you’ll be asked in the middle of this to resolve a conflict:
+a. you may be asked in the middle of this to resolve a conflict:
 
 ```
    conflict  app/controllers/search_history_controller.rb
@@ -53,7 +53,7 @@ b. You’ll be asked about installing a local search form. Say y.
 Install local search form with advanced link? (y/N) y
 ```
 
-c. OK, now do the install. The install script takes 3 arguments: 
+OK, now do the install. The install script takes 3 arguments: 
 
 ```
 ./illumination/install.sh tenant app_name absolute_path_to_portal_config_file

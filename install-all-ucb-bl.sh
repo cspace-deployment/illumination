@@ -1,3 +1,6 @@
+#
+# assumes that the illumination repo and the django_example_config have been clone into the
+# home directory from GitHub, and that installations will happen in the home directory.
 cd ~/illumination
 git checkout -- src/*
 cd
