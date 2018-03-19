@@ -61,7 +61,7 @@ bin/spring stop
 
 rails generate blacklight_range_limit:install
 rails generate blacklight_gallery:install
-#rails generate blacklight_advanced_search:install
+rails generate blacklight_advanced_search:install
 
 # stop the troublesome spring server again, for now
 bin/spring stop
