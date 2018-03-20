@@ -262,6 +262,7 @@ class CatalogController < ApplicationController
       end
     end
 
+    # keeping these here for now in case they are someday needed
     # config.add_search_field 'objmusno_s', label: 'Museum number'
     # config.add_search_field 'objaltnum_ss', label: 'Alternate number'
     # config.add_search_field 'objaccno_ss', label: 'Accession number'
@@ -324,11 +325,11 @@ class CatalogController < ApplicationController
     config.add_show_field 'objproddate_s', label: 'Production date'
     config.add_show_field 'objcolldate_s', label: 'Collection date'
     config.add_show_field 'objaccdate_ss', label: 'Accession date'
-    config.add_show_field 'objacqdate_ss', label: 'Acquisition date'
+    #config.add_show_field 'objacqdate_ss', label: 'Acquisition date'
 
     config.add_show_field 'hasimages_s', label: 'Photographed'
-    config.add_show_field 'imagetype_ss', label: 'Image type'
-    config.add_show_field 'hascoords_s', label: 'Collection place mapped?'
+    #config.add_show_field 'imagetype_ss', label: 'Image type'
+    #config.add_show_field 'hascoords_s', label: 'Collection place mapped?'
     config.add_show_field 'objkeelingser_s', label: 'Keeling series number'
     
     # restricted fields
