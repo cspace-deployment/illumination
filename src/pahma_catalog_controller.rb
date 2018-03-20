@@ -231,33 +231,64 @@ class CatalogController < ApplicationController
     config.add_index_field 'objfcp_s', label: 'Collection place'
     config.add_index_field 'objcolldate_s', label: 'Collection date'
     # search
-    config.add_search_field 'objmusno_s', label: 'Museum number'
-    config.add_search_field 'objaltnum_ss', label: 'Alternate number'
-    config.add_search_field 'objaccno_ss', label: 'Accession number'
-    config.add_search_field 'objname_s', label: 'Object name'
-    config.add_search_field 'objdescr_s', label: 'Description'
-    config.add_search_field 'anonymousdonor_ss', label: 'Donor'
-    config.add_search_field 'objfcp_s', label: 'Collection place'
-    config.add_search_field 'objpp_ss', label: 'Production place'
-    config.add_search_field 'objassoccult_ss', label: 'Culture or time period'
-    config.add_search_field 'objmaker_ss', label: 'Maker or artist'
-    config.add_search_field 'objmaterials_ss', label: 'Materials'
-    #config.add_search_field 'taxon_s', label: 'Taxon'
-    config.add_search_field 'objinscrtext_ss', label: 'Inscription'
-    config.add_search_field 'objcollector_ss', label: 'Collector'
-    config.add_search_field 'objtype_s', label: 'Object Type'
-    config.add_search_field 'objfilecode_ss', label: 'Function'
-    config.add_search_field 'objcontextuse_s', label: 'Context of Use'
-    #config.add_search_field 'objproddate_s', label: 'Production date'
-    #config.add_search_field 'objacqdate_ss', label: 'Acquisition date'
-    config.add_search_field 'objcolldate_s', label: 'Collection date'
-    #config.add_search_field 'objaccdate_ss', label: 'Accession date'
-    config.add_search_field 'objkeelingser_s', label: 'Keeling series'
-    
-    config.add_search_field 'objdept_s', label: 'Department'
+    [
+      ['objmusno_s', 'Museum number'],
+      ['objaltnum_ss', 'Alternate number'],
+      ['objaccno_ss', 'Accession number'],
+      ['objname_txt', 'Object name'],
+      ['objdescr_txt', 'Description'],
+      ['anonymousdonor_txt', 'Donor'],
+      ['objfcp_txt', 'Collection place'],
+      ['objpp_txt', 'Production place'],
+      ['objassoccult_txt', 'Culture or time period'],
+      ['objmaker_txt', 'Maker or artist'],
+      ['objmaterials_txt', 'Materials'],
+      ['objinscrtext_txt', 'Inscription'],
+      ['objcollector_txt', 'Collector'],
+      ['objtype_txt', 'Object Type'],
+      ['objfilecode_txt', 'Function'],
+      ['objcontextuse_txt', 'Context of Use'],
+      ['objcolldate_txt', 'Collection date'],
+      ['objkeelingser_txt', 'Keeling series'],
+      ['objdept_txt', 'Department']
+      ].each do |search_field|
+      config.add_search_field(search_field[0]) do |field|
+        field.label = search_field[1]
+        #field.solr_parameters = { :'spellcheck.dictionary' => search_field[0] }
+        field.solr_local_parameters = {
+          qf: search_field[0],
+          pf: search_field[0]
+        }
+      end
+    end
 
-    #config.add_search_field 'objpersondepicted_ss', label: 'Person depicted'
-    #config.add_search_field 'objplacedepicted_ss', label: 'Person depicted'
+    # config.add_search_field 'objmusno_s', label: 'Museum number'
+    # config.add_search_field 'objaltnum_ss', label: 'Alternate number'
+    # config.add_search_field 'objaccno_ss', label: 'Accession number'
+    # config.add_search_field 'objname_s', label: 'Object name'
+    # config.add_search_field 'objdescr_s', label: 'Description'
+    # config.add_search_field 'anonymousdonor_ss', label: 'Donor'
+    # config.add_search_field 'objfcp_s', label: 'Collection place'
+    # config.add_search_field 'objpp_ss', label: 'Production place'
+    # config.add_search_field 'objassoccult_ss', label: 'Culture or time period'
+    # config.add_search_field 'objmaker_ss', label: 'Maker or artist'
+    # config.add_search_field 'objmaterials_ss', label: 'Materials'
+    ## config.add_search_field 'taxon_s', label: 'Taxon'
+    # config.add_search_field 'objinscrtext_ss', label: 'Inscription'
+    # config.add_search_field 'objcollector_ss', label: 'Collector'
+    # config.add_search_field 'objtype_s', label: 'Object Type'
+    # config.add_search_field 'objfilecode_ss', label: 'Function'
+    # config.add_search_field 'objcontextuse_s', label: 'Context of Use'
+    ## config.add_search_field 'objproddate_s', label: 'Production date'
+    ## config.add_search_field 'objacqdate_ss', label: 'Acquisition date'
+    # config.add_search_field 'objcolldate_s', label: 'Collection date'
+    ## config.add_search_field 'objaccdate_ss', label: 'Accession date'
+    # config.add_search_field 'objkeelingser_s', label: 'Keeling series'
+    
+    # config.add_search_field 'objdept_s', label: 'Department'
+
+    ## config.add_search_field 'objpersondepicted_ss', label: 'Person depicted'
+    ## config.add_search_field 'objplacedepicted_ss', label: 'Person depicted'
     
     # restricted fields
     # has restrictions?
