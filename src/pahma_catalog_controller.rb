@@ -310,7 +310,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'objfcp_s', label: 'Collection place'
     config.add_show_field 'objfcpverbatim_s', label: 'Collection place (verbatim)'
     # lat long
-    config.add_show_field 'objfcpelevation_s', label: 'Collection place elevation'
+    #config.add_show_field 'objfcpelevation_s', label: 'Collection place elevation'
     config.add_show_field 'objpp_ss', label: 'Production place'
     config.add_show_field 'objassoccult_ss', label: 'Culture or time period'
     config.add_show_field 'objmaker_ss', label: 'Maker or artist'
