@@ -1,13 +1,13 @@
 <div class="navbar-right">
   <ul class="nav navbar-nav">
-      <li><a href="https://hearstmuseum.berkeley.edu/about-portal/">About</a></li>
+      <li><a target="_blank" href="https://hearstmuseum.berkeley.edu/about-portal/">About</a></li>
   </ul>
 
   <ul class="nav navbar-nav">
     <%= render_nav_actions do |config, action|%>
       <li><%= action %></li>
     <% end %>
-    <li><a href="https://hearstmuseum.berkeley.edu/portal-feedback/">Feedback</a></li>
+    <li><a target="_blank" href="https://hearstmuseum.berkeley.edu/portal-feedback/">Feedback</a></li>
   </ul>
 
   <% if has_user_authentication_provider? %>
