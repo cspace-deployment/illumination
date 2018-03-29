@@ -1,4 +1,4 @@
-import csv
+import csv, sys
 
 template = '''
 <td class="splash_td">
@@ -28,7 +28,8 @@ template = '''<td class="splash_td">
 
 #file = 'bl.static.txt'
 #file = 'bl.static.v2.txt'
-file = 'bl.static.v3.txt'
+#file = 'bl.static.v3.txt'
+file = sys.argv[1]
 
 with open(file, 'r') as f1:
     reader = csv.reader(f1, delimiter="|", quoting=csv.QUOTE_NONE, quotechar=chr(255))
@@ -49,4 +50,6 @@ with open(file, 'r') as f1:
             print '<tr class="grid">'
             n = 0
         n = n + 1
+        # hack!
+        filled_in = filled_in.replace(']">', '">')
         print filled_in
