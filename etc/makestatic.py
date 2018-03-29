@@ -19,7 +19,7 @@ template_old = '''<td class="splash_td">
 
 
 template = '''<td class="splash_td">
-<a target="image" href="%s">
+<a href="%s">
 <div class="thumb" style="background-image: url('%s');" title=""></div></a>
 <br/><b><a class="fr" href="%s">%s</a></b>
 <!-- a class="fr" href="%s">%s</a -->
