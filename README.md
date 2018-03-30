@@ -124,9 +124,18 @@ To do this, you'll need to:
 
 The Solr server used for the UCB BL deployments
 
+## Google Analytics and robots.txt
+
+Google Analytics is not yet enabled for this Blacklight site.
+
+By default, ```public/robots.txt``` is empty. For deployments where you want to block
+crawlers (e.g. development deployments) you may wish to change this. See, e.g.:
+
+https://issues.collectionspace.org/browse/DJAN-98
+
 ## Monitoring with god
 
-On EC2, the RoR services are being monitored using ```god```.
+On EC2, the RoR services have monitored using ```god```.
 
 In this repo there is a file called ```howto-ec2.txt``` which shows how
 to configure an EC2 instance with the UCB demo portals and ```god```.
@@ -135,3 +144,10 @@ Note that while this description pertains to a server serving all 5 UCB portals,
 it currently focuses on the PAHMA deployment.
 
 Please refer to this file for the basics on how to set things up.
+
+## Running under Passenger
+
+On the ETS cloud server (```blacklight-(dev,prod).ets.berkeley.edu```), the RoR service
+is being running using Passenger under Apache.
+
+The Passenger gem is now required and one can 
