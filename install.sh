@@ -27,6 +27,7 @@ cd ${source_dir}
 echo "Getting Blacklight custom code from from" `pwd`
 git clean -fd
 git checkout -- *
+git pull -v
 
 perl -i -pe "s/#TENANT#/${tenant}/g" ${source_dir}/*
 
@@ -70,6 +71,7 @@ bin/spring stop
 # additional customization of templates and css
 cp ${source_dir}/*.svg public/
 cp ${source_dir}/*.png public/
+cp ${source_dir}/robots.txt public/
 cp ${source_dir}/splash_images/* public/
 cp -r ${source_dir}/fonts public/
 cp ${source_dir}/header-logo-${tenant}.png public/header-logo.png
@@ -103,6 +105,9 @@ cp ${source_dir}/_variables.scss app/assets/stylesheets/
 cp ${source_dir}/${tenant}_variables.scss app/assets/stylesheets/_variables.scss
 
 cp ${source_dir}/blacklight.scss app/assets/stylesheets/
+
+# remove this when the footer refactoring is done.
+cp ${source_dir}/${tenant}_application.css app/assets/stylesheets/application.css
 
 echo
 echo "********************************************************************"
