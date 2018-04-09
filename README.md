@@ -181,7 +181,8 @@ cd projects
 rm search_pahma
 # redeploy PAHMA BL to search_pahma
 ./illumination/install.sh pahma search_pahma ~/projects/django_example_config/pahma/config/pahmapublicparms.csv
-# move the configured directory out of the way
+
+# (nb: you'll need to reply Y three times in the course of the above install)
 
 #### for now, it seems, more tweaking required:
 cd search_pahma
@@ -196,6 +197,7 @@ rake db:migrate
 # if a production deployment, don't forget to remove robots.txt
 rm public/robots.txt
 
+# move the just-configured directory out of the way
 cd ..
 mv search_pahma s3
 
