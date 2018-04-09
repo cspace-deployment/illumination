@@ -18,6 +18,11 @@ $state-success-bg: lighten($brand-primary, 60%);
     padding: 15% 10%;
     margin-top: 0;
 }
+@media print {
+  a[href]:after {
+    content: none;
+  }
+}
 @media (min-width: 576px) {
     .site_footer {
         padding: 7% 0
