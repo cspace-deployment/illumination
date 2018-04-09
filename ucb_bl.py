@@ -1,5 +1,7 @@
 # set global variables
 
+# nb: this script now requires python3
+
 import csv
 from os import path, popen, sys
 import json
@@ -198,11 +200,11 @@ if __name__ == "__main__":
                 bl_config[bl_field]["config.add_%s_field '%s', label: '%s'%s" % (bl_field, solr_field, label_field, limit)] = True
 
 for section in bl_config:
-    print '# %s' % section
+    print('# %s' % section)
     for c in sorted(bl_config[section]):
-        print c
+        print(c)
 
-print '''
+print('''
   end
 end
-'''
+''')

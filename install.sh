@@ -31,7 +31,7 @@ git pull -v
 
 perl -i -pe "s/#TENANT#/${tenant}/g" ${source_dir}/*
 
-python ${source_dir}/../ucb_bl.py ${portal_config_file} > bl_config.txt
+python3 ${source_dir}/../ucb_bl.py ${portal_config_file} > bl_config.txt
 
 # configure BL using existing Portal config file
 cat ${source_dir}/catalog_controller.template bl_config.txt > ${source_dir}/catalog_controller.rb
