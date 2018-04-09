@@ -9,7 +9,7 @@ import json
 
 def getParms(parmFile, prmz):
     try:
-        f = open(parmFile, 'rb')
+        f = open(parmFile, 'r')
         csvfile = csv.reader(f, delimiter="\t")
     except IOError:
         raise
