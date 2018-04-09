@@ -145,9 +145,92 @@ it currently focuses on the PAHMA deployment.
 
 Please refer to this file for the basics on how to set things up.
 
-## Running under Passenger
+## Running under Passenger or Rails development server
 
 On the ETS cloud server (```blacklight-(dev,prod).ets.berkeley.edu```), the RoR service
 is being running using Passenger under Apache.
 
-The Passenger gem is now required and one can 
+The Passenger gem is now required and one can start the server in at least the following ways:
+
+```bash
+export RAILS_ENV=production
+passenger start
+```
+or
+
+```bash
+export RAILS_ENV=production
+rails s
+```
+
+Then you should be able to visit the app at [http://blacklight-dev.ets.berkeley.edu:3000]
+
+## Deploying an update
+
+Assuming that everything is updated in GitHub, here's the current working
+process. Yes, it could use some help!
+
+```
+$ ssh blacklight-dev.ets.berkeley.edu
+
+jblowe@blacklight-dev:~$ sudo su - blacklight
+
+# the rails apps and their various versions are all deployed in the projects directory
+cd projects
+# get rid of existing symlink
+rm search_pahma
+# redeploy PAHMA BL to search_pahma
+./illumination/install.sh pahma search_pahma ~/projects/django_example_config/pahma/config/pahmapublicparms.csv
+# move the configured directory out of the way
+
+#### for now, it seems, more tweaking required:
+cd search_pahma
+export RAILS_ENV=production
+# need to set a secret key since it's not set in the environment
+vi config/secrets.yml 
+# devise seems to need editing too...
+vi config/initializers/devise.rb
+# apply migrations
+rake db:migrate
+
+# if a production deployment, don't forget to remove robots.txt
+rm public/robots.txt
+
+cd ..
+mv search_pahma s3
+
+# make a symlink
+ln -s s3 search_pahma
+cd search_pahma
+bundle install
+
+# or use the script:
+
+./relink.sh s3
+
+# ok now you can restart apache (probably you'll need to exit the app user account to do to):
+exit
+sudo apache2ctl graceful
+
+# or run under passenger or rails dev server (see above)
+```
+
+## About the production parameters
+
+There's still something odd in the production parameters. For production ```eager_load``` should be true, but
+at the moment the app won't run with that.
+
+e.g.
+
+```
+diff config/environments/production.rb ~/production.rb 
+
+11c11
+<   config.eager_load = false
+---
+>   config.eager_load = true
+31c31
+<   config.assets.compile = true
+---
+>   config.assets.compile = false
+```
