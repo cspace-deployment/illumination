@@ -43,6 +43,7 @@ with open(file, 'r') as f1:
         #medium = image.replace('OriginalJpeg','Medium')
         search = search.replace('[canned search|','')
         search = search.replace('http://34.217.238.99:3000/','')
+        search = search.replace('https://blacklight-dev.ets.berkeley.edu/','')
         original = image
         musno = ''
         filled_in = template % (search,image,search,caption,search,musno)
