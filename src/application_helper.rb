@@ -1,7 +1,7 @@
 module ApplicationHelper
 
   def render_csid csid, derivative
-      "https://webapps.cspace.berkeley.edu/pahma/imageserver/blobs/#{csid}/derivatives/#{derivative}/content"
+      "https://webapps.cspace.berkeley.edu/#TENANT#/imageserver/blobs/#{csid}/derivatives/#{derivative}/content"
   end
 
   def render_media options={}
