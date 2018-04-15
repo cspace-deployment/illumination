@@ -3,11 +3,14 @@ Blacklight customizations for UC Berkeley.
 
 Just exactly the files needed to deploy into an existing vanilla BL installation to make it work for the various UCB "museum portals".
 
+The document shows the steps for deploying the PAHMA Blacklight app ("pahma"), but you should be able to substitute whatever institution key you like and it will work.
+
 _Caveat utilizator!_ This is all fresh and wet behind the gills!
 
 ## Prerequisites
 
-First, you must have have installed all the RoR and Solr prerequisites. Probably it is easiest to first
+First, you must have have installed all the RoR prerequisites (and if using a local Solr server which you should 
+for testing, those prerequisites, too). Probably it is easiest to first
 install and run a "vanilla" Blacklight deployment, then try the ```illumination``` code described below.
 
 See the Blacklight documentation:
@@ -24,7 +27,7 @@ _NB: you'll need to be inside the Berkeley firewall or have access via the VPN (
 PAHMA Public Portal is not available to the outside world). So, start your VPN client up if needed._
 
 ```
-cd <where_you_want_to_install_blacklight>
+cd <where_you_want_to_install_blacklight> # for UCB deployments on ETS servers, this is ~/projects
 ```
 
 1. Get the two repos you’ll need...
@@ -62,7 +65,7 @@ OK, now do the install. The install script takes 3 arguments:
 e.g.
 
 ```
-./illumination/install.sh pahma search_pahma ~/django_example_config/pahma/config/pahmapublicparms.csv 
+./illumination/install.sh pahma search_pahma ~/projects/django_example_config/pahma/config/pahmapublicparms.csv 
 
 [...]
 ********************************************************************
@@ -103,6 +106,8 @@ http://localhost:3000/?utf8=%E2%9C%93&search_field=objmusno_s&q=%221-1000%22
 
 ## Important Caveats
 
+* The current implementation expects to run Rails under Passenger with Apache. The steps to get all that set up are not described here and are dependent on OS details.
+
 * This deployment expects to be able to access the public PAHMA Solr server at:
 
   https://webapps-dev.cspace.berkeley.edu/solr/pahma-public
@@ -122,28 +127,16 @@ To do this, you'll need to:
 
 ## Install a local Solr5 server
 
-The Solr server used for the UCB BL deployments
+The Solr server used for the UCB BL deployments...
 
 ## Google Analytics and robots.txt
 
 Google Analytics is not yet enabled for this Blacklight site.
 
-By default, ```public/robots.txt``` is empty. For deployments where you want to block
-crawlers (e.g. development deployments) you may wish to change this. See, e.g.:
+By default, ```public/robots.txt``` block all crawlers. For deployments where you want to admit
+crawlers (e.g. production deployments) you may wish to change this. See, e.g.:
 
 https://issues.collectionspace.org/browse/DJAN-98
-
-## Monitoring with god
-
-On EC2, the RoR services have monitored using ```god```.
-
-In this repo there is a file called ```howto-ec2.txt``` which shows how
-to configure an EC2 instance with the UCB demo portals and ```god```.
-
-Note that while this description pertains to a server serving all 5 UCB portals, 
-it currently focuses on the PAHMA deployment.
-
-Please refer to this file for the basics on how to set things up.
 
 ## Running under Passenger or Rails development server
 
@@ -187,9 +180,9 @@ rm search_pahma
 #### for now, it seems, more tweaking required:
 cd search_pahma
 export RAILS_ENV=production
-# need to set a secret key since it's not set in the environment
+# need to set a secret key since it's not set in the environment. uncomment the one here:
 vi config/secrets.yml 
-# devise seems to need editing too...
+# and here:
 vi config/initializers/devise.rb
 # apply migrations
 rake db:migrate
@@ -236,3 +229,15 @@ diff config/environments/production.rb ~/production.rb
 ---
 >   config.assets.compile = false
 ```
+
+## Monitoring with god
+
+On EC2, the RoR services have been monitored using ```god```.
+
+In this repo there is a file called ```howto-ec2.txt``` which shows how
+to configure an EC2 instance with the UCB demo portals and ```god```.
+
+Note that while this description pertains to a server serving all 5 UCB portals, 
+it currently focuses on the PAHMA deployment.
+
+Please refer to this file for the basics on how to set things up.
