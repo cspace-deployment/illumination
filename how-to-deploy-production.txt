@@ -1,0 +1,32 @@
+
+cd projects
+# get rid of existing symlink
+rm search_pahma
+# redeploy PAHMA BL to search_pahma
+./illumination/install.sh pahma search_pahma ~/projects/django_example_config/pahma/config/pahmapublicparms.csv
+
+# more tweaking required, it seems
+cd search_pahma/
+# need to set a secret key since it's not set in the environment
+vi config/secrets.yml
+# devise seems to need editing too...
+vi config/initializers/devise.rb
+# and wow this as well??
+bundle install
+export RAILS_ENV=production
+rake db:migrate
+cd ~/projects
+
+# move the actual directory out of the way
+mv search_pahma s6
+./relink.sh s6
+
+or, equivlently
+
+ln -s s6 search_pahma
+cd search_pahma
+bundle install
+
+# run under passenger
+export RAILS_ENV=production
+passenger start
