@@ -7,6 +7,11 @@ rm search_pahma
 
 # more tweaking required, it seems
 cd search_pahma/
+
+# link the log to the "permanent" log directory
+rm -rf log/
+ln -s /var/log/blacklight/pahma log
+
 # need to set a secret key since it's not set in the environment
 vi config/secrets.yml
 # devise seems to need editing too...

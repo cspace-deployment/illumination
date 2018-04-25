@@ -365,7 +365,7 @@ class CatalogController < ApplicationController
     #config.add_facet_field 'objcolldate_begin_i', label: 'Year collected', range: true, index_range: true
     config.add_facet_field 'objcollector_ss', label: 'Collector', limit: true, index_range: true
     config.add_facet_field 'anonymousdonor_ss', label: 'Donor', limit: true, index_range: true
-    config.add_facet_field 'objassoccult_ss', label: 'Culture or time period', limit: true, index_range: true
+    config.add_facet_field 'objculturetree_ss', label: 'Culture or time period', limit: true, index_range: true
     config.add_facet_field 'objmaker_ss', label: 'Maker or artist', limit: true, index_range: true
     config.add_facet_field 'objmaterials_ss', label: 'Materials', limit: true, index_range: true
     config.add_facet_field 'hasimages_s', label: 'Photographed'
