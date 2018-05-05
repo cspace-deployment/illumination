@@ -25,9 +25,10 @@ source_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/src"
 
 cd ${source_dir}
 echo "Getting Blacklight custom code from from" `pwd`
-git clean -fd
-git checkout -- *
-git pull -v
+git reset --hard
+#git clean -fd
+#git checkout -- *
+#git pull -v
 
 perl -i -pe "s/#TENANT#/${tenant}/g" ${source_dir}/*
 
@@ -53,10 +54,6 @@ cp ${source_dir}/application_helper.rb app/helpers/
 cp ${source_dir}/catalog_controller.rb app/controllers/
 cp ${source_dir}/search_history_controller.rb app/controllers/
 
-# google analytics stuff
-cp ${source_dir}/blacklight.html.erb app/views/layouts/
-cp ${source_dir}/google_analytics.js.coffee app/assets/javascripts/
-
 mkdir -p app/helpers/blacklight
 # diff ${source_dir}/catalog_helper_behavior.rb app/helpers/blacklight/
 cp ${source_dir}/catalog_helper_behavior.rb app/helpers/blacklight/
@@ -71,6 +68,10 @@ rails generate blacklight_advanced_search:install
 
 # stop the troublesome spring server again, for now
 bin/spring stop
+
+# google analytics stuff
+cp ${source_dir}/blacklight.html.erb app/views/layouts/
+cp ${source_dir}/google_analytics.js.coffee app/assets/javascripts/
 
 # additional customization of templates and css
 cp ${source_dir}/*.svg public/

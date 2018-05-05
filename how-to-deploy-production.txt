@@ -1,16 +1,27 @@
+# In case you forget how to re-deploy the BL RoR app, here are some reminders.
+#
+# NB: someday the process can and should be fully automated.
+#
+# For now, it requires some human intervention:
+#
+# * The illumination install.sh script requires three Y responses from the keyboard at the moment.
+# * Two "secrets" need to be set explicitly.
+# * This then entails re-running the migrations.
+# * We are using symlinks to link various directories to permanent locations (runtime dir, logs, sqllite db)
 
-cd projects
-# get rid of existing symlink
-rm search_pahma
-# redeploy PAHMA BL to search_pahma
-./illumination/install.sh pahma search_pahma ~/projects/django_example_config/pahma/config/pahmapublicparms.csv
+cd ~/projects
+# redeploy PAHMA BL to search_pahma; suggest using a deployment directory name based on date, e.g. sYYYYMMDD
+./illumination/install.sh pahma s20180505 ~/projects/django_example_config/pahma/config/pahmapublicparms.csv
 
 # more tweaking required, it seems
-cd search_pahma/
+cd s20180505/
 
 # link the log to the "permanent" log directory
 rm -rf log/
 ln -s /var/log/blacklight/pahma log
+# link the db directory to the "permanent" db directory
+rm -rf db
+ln -s /var/blacklight-db/pahma db
 
 # need to set a secret key since it's not set in the environment
 vi config/secrets.yml
@@ -22,9 +33,8 @@ export RAILS_ENV=production
 rake db:migrate
 cd ~/projects
 
-# move the actual directory out of the way
-mv search_pahma s6
-./relink.sh s6
+# link the new dir as 'search_pahma' (passenger, etc. expect it to be this directory
+./relink.sh s20180505
 
 or, equivlently
 
