@@ -5,7 +5,7 @@
 # For now, it requires some human intervention:
 #
 # * The illumination install.sh script requires three Y responses from the keyboard at the moment.
-# * Two "secrets" need to be set explicitly.
+# * Two "secrets" may need to be set explicitly.
 # * This then entails re-running the migrations.
 # * We are using symlinks to link various directories to permanent locations (runtime dir, logs, sqllite db)
 
@@ -16,18 +16,21 @@ cd ~/projects
 # more tweaking required, it seems
 cd s20180505/
 
-# link the log to the "permanent" log directory
+# on dev and production, the create log and sqlite db should be removed and
+# a link made to the "permanent" directories
+# (local dev install do not need to do this, of course)
 rm -rf log/
 ln -s /var/log/blacklight/pahma log
 # link the db directory to the "permanent" db directory
 rm -rf db
 ln -s /var/blacklight-db/pahma db
 
-# need to set a secret key since it's not set in the environment
-vi config/secrets.yml
+# there are two secret keys needed. the first must be set as an env var for production.
+# the second will copy the first if not provided.
+# you can edit the following two files if you want to set them yourself.
+# vi config/secrets.yml
 # devise seems to need editing too...
-vi config/initializers/devise.rb
-# and wow this as well??
+# vi config/initializers/devise.rb
 bundle install
 export RAILS_ENV=production
 rake db:migrate
@@ -38,9 +41,8 @@ cd ~/projects
 
 or, equivlently
 
-ln -s s6 search_pahma
+ln -s s20180505 search_pahma
 cd search_pahma
-bundle install
 
 # run under passenger
 export RAILS_ENV=production
