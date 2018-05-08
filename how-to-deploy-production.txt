@@ -9,14 +9,15 @@
 # * This then entails re-running the migrations.
 # * We are using symlinks to link various directories to permanent locations (runtime dir, logs, sqllite db)
 
+# this is the 'root directory' for the the RoR apps and versions of apps
 cd ~/projects
+
 # redeploy PAHMA BL to search_pahma; suggest using a deployment directory name based on date, e.g. sYYYYMMDD
 ./illumination/install.sh pahma s20180505 ~/projects/django_example_config/pahma/config/pahmapublicparms.csv
 
-# more tweaking required, it seems
+# at the moment, a little more manual tweaking is required...
 cd s20180505/
-
-# on dev and production, the create log and sqlite db should be removed and
+# on dev and production, the created log and sqlite db should be removed and
 # a link made to the "permanent" directories
 # (local dev install do not need to do this, of course)
 rm -rf log/
@@ -26,24 +27,28 @@ rm -rf db
 ln -s /var/blacklight-db/pahma db
 
 # there are two secret keys needed. the first must be set as an env var for production.
+# this has been done in .profile for the blacklight user.
 # the second will copy the first if not provided.
-# you can edit the following two files if you want to set them yourself.
+# or you can edit the following two files if you want to set them yourself.
 # vi config/secrets.yml
 # devise seems to need editing too...
 # vi config/initializers/devise.rb
+
+# we still need to do a migration to support production mode (the 'bundle install')
 bundle install
 export RAILS_ENV=production
 rake db:migrate
 cd ~/projects
 
-# link the new dir as 'search_pahma' (passenger, etc. expect it to be this directory
+# link the new dir as 'search_pahma' (passenger, etc. expects it to be this directory)
+# apache should probably be stopped ad this point, though it's not clear it matters...
+# you'll be restarting it after this step anyway.
 ./relink.sh s20180505
 
-or, equivlently
+or
 
 ln -s s20180505 search_pahma
-cd search_pahma
 
-# run under passenger
+# run under passenger, if you like, or start/restart apache
 export RAILS_ENV=production
 passenger start
