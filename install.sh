@@ -80,6 +80,7 @@ cp ${source_dir}/robots.txt public/
 cp ${source_dir}/splash_images/* public/
 cp -r ${source_dir}/fonts public/
 cp ${source_dir}/header-logo-${tenant}.png public/header-logo.png
+cp ${source_dir}/${tenant}_favicon.png public/favicon.png
 
 mkdir -p app/views/shared
 cp ${source_dir}/_header_navbar.html.erb app/views/shared/
