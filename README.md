@@ -1,5 +1,5 @@
 # illumination
-Blacklight customizations for UC Berkeley.
+Blacklight customizations for UC Berkeley museum portals.
 
 Just exactly the files needed to deploy into an existing vanilla BL installation to make it work for the various UCB "museum portals".
 
@@ -33,22 +33,22 @@ cd <where_you_want_to_install_blacklight> # for UCB deployments on ETS servers, 
 1. Get the two repos you’ll need...
 
 ```
-git clone https://github.com/jblowe/illumination.git
+git clone https://github.com/cspace-deployment/illumination.git
 git clone https://github.com/cspace-deployment/django_example_config.git
 ```
 
 2. Run the script to install BL and customize for PAHMA
 
-_**NB before you kick off the install script:**_ 
+_**A couple remarks before you kick off the install script:**_ 
 
-a. you may be asked in the middle of this to resolve a conflict:
+a. you may be asked in the middle of this to resolve one or more conflicts:
 
 ```
    conflict  app/controllers/search_history_controller.rb
 Overwrite /Users/jblowe/search_pahma/app/controllers/search_history_controller.rb? (enter "h" for help) [Ynaqdh] 
 ```
 
-(I’m not sure it matters what you answer at the moment...)
+(just hit return -- i.e. take the default Y...)
 
 b. You’ll be asked about installing a local search form. Say y.
 
@@ -111,21 +111,23 @@ http://localhost:3000/?utf8=%E2%9C%93&search_field=objmusno_s&q=%221-1000%22
 * This deployment expects to be able to access the public PAHMA Solr server at:
 
   https://webapps-dev.cspace.berkeley.edu/solr/pahma-public
+  
+  This service _is_ available inside the UCB firewall. If you are outside, you'll need to install your own (local) Solr server with this core.
 
 * If you are doing development that requires a different Solr server, you'll need to update that in ```config/blacklight.yml```.
+
+## Install a local Solr5 server
 
 Typically, you'll want your own Solr server, with your own data, running on localhost.
 
 To do this, you'll need to:
 
-1. Install Solr (we are using Solr5 at the moment, alas)
+1. Install Solr (we are using Solr5 at the moment, alas.)
 2. Configure Solr for the ```pahma-public``` core (see below for how to do this).
 3. Start it up.
 4. Load some test data. (Some or all of the PAHMA public data extract, contact jblowe@berkeley.edu to get this file.)
 
 * Caveat Utilizator: many BL and other features are not working correctly at the moment; see the UCB JIRAs for details.
-
-## Install a local Solr5 server
 
 The Solr server used for the UCB BL deployments...
 
@@ -158,13 +160,13 @@ rails s
 
 Then you should be able to visit the app at [http://blacklight-dev.ets.berkeley.edu:3000]
 
-## Deploying an update
+## Deploying an update on the ETS Production server
 
 Assuming that everything is updated in GitHub, here's the current working
 process. Yes, it could use some help!
 
 ```
-$ ssh blacklight-dev.ets.berkeley.edu
+$ ssh blacklight-prod.ets.berkeley.edu
 
 jblowe@blacklight-dev:~$ sudo su - blacklight
 
@@ -172,38 +174,53 @@ jblowe@blacklight-dev:~$ sudo su - blacklight
 cd projects
 # get rid of existing symlink
 rm search_pahma
-# redeploy PAHMA BL to search_pahma
-./illumination/install.sh pahma search_pahma ~/projects/django_example_config/pahma/config/pahmapublicparms.csv
-
-# (nb: you'll need to reply Y three times in the course of the above install)
-
-#### for now, it seems, more tweaking required:
-cd search_pahma
+cd illumination
+git pull -v
+cd
+~/illumination/install.sh pahma s20180505 ~/projects/django_example_config/pahma/config/pahmapublicparms.csv
+cd projects/s20180505/
+# remake the two symlinks...
+# link the log dir to the "permanent" log dir
+rm -rf log/
+ln -s /var/log/blacklight/pahma log
+# link the db directory to the "permanent" db directory
+rm -rf db
+ln -s /var/blacklight-db/pahma db
+#
+bundle install
 export RAILS_ENV=production
-# need to set a secret key since it's not set in the environment. uncomment the one here:
+rake db:migrate
+# remake the symlink between the actual directory and the directory passenger expects
+cd
+./relink.sh s20180505
+```
+
+NB: it could be that you'll need to check some of the secret keys...
+```
+# the secret key is now set in the environment. but you could do it here:
 vi config/secrets.yml 
 # and here:
 vi config/initializers/devise.rb
-# apply migrations
+# you'd need to re-apply migrations
 rake db:migrate
+```
 
+Other things to consider:
+```
 # if a production deployment, don't forget to remove robots.txt
 rm public/robots.txt
 
-# move the just-configured directory out of the way
-cd ..
-mv search_pahma s3
+# passenger expect the code to be deployed in a fixed directory, e.g. 'search_pahma'
+# the relink script will do that as shown above:
+./relink.sh s20180505
 
+# or you can do it by hand:
 # make a symlink
-ln -s s3 search_pahma
+ln -s s20180505 search_pahma
 cd search_pahma
 bundle install
 
-# or use the script:
-
-./relink.sh s3
-
-# ok now you can restart apache (probably you'll need to exit the app user account to do to):
+# ok now you can restart apache (probably you'll need to exit the app user account to do it):
 exit
 sudo apache2ctl graceful
 
