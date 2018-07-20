@@ -80,6 +80,11 @@ cp ${source_dir}/robots.txt public/
 cp ${source_dir}/splash_images/* public/
 cp -r ${source_dir}/fonts public/
 cp ${source_dir}/header-logo-${tenant}.png public/header-logo.png
+# the favicon only needs to go one place, but I'm not sure which of the two possibilities is right.
+# so for now, put it in both places.
+cp ${source_dir}/favicon.png app/assets/images/favicon.png
+cp ${source_dir}/${tenant}_favicon.png app/assets/images/favicon.png
+cp ${source_dir}/favicon.png public
 cp ${source_dir}/${tenant}_favicon.png public/favicon.png
 
 mkdir -p app/views/shared
@@ -109,6 +114,9 @@ cp ${source_dir}/${tenant}_search_form.html.erb app/views/catalog/_search_form.h
 
 cp ${source_dir}/_variables.scss app/assets/stylesheets/
 cp ${source_dir}/${tenant}_variables.scss app/assets/stylesheets/_variables.scss
+
+cp ${source_dir}/extras.scss app/assets/stylesheets/
+cp ${source_dir}/${tenant}_extras.scss app/assets/stylesheets/extras.scss
 
 cp ${source_dir}/blacklight.scss app/assets/stylesheets/
 
