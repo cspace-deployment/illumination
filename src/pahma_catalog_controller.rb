@@ -308,7 +308,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'objdescr_s', label: 'Description'
     config.add_show_field 'anonymousdonor_ss', label: 'Donor'
     config.add_show_field 'objfcp_s', label: 'Collection place'
-    config.add_show_field 'objfcpverbatim_s', label: 'Collection place (verbatim)'
+    config.add_show_field 'objfcpverbatim_s', label: 'Verbatim coll. place'
     # lat long
     #config.add_show_field 'objfcpelevation_s', label: 'Collection place elevation'
     config.add_show_field 'objpp_ss', label: 'Production place'
@@ -344,7 +344,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'objdimensions_ss', label: 'Dimensions'
     config.add_show_field 'objtitle_s', label: 'Title'
     config.add_show_field 'objcomment_s', label: 'Comment'
-    config.add_show_field 'blob_ss', helper_method: 'render_media', label: 'Images'
+    config.add_show_field 'blob_ss', helper_method: 'render_media', label: 'Media'
     config.add_show_field 'card_ss', helper_method: 'render_media', label: 'Catalog cards'
     #config.add_show_field 'objpersondepicted_ss', label: 'Person depicted', limit: true
     #config.add_show_field 'objplacedepicted_ss', label: 'Person depicted', limit: true
