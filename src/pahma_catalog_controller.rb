@@ -345,7 +345,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'objtitle_s', label: 'Title'
     config.add_show_field 'objcomment_s', label: 'Comment'
     config.add_show_field 'blob_ss', helper_method: 'render_media', label: 'Media'
-    config.add_show_field 'card_ss', helper_method: 'render_media', label: 'Catalog cards'
+    config.add_show_field 'card_ss', helper_method: 'render_media', label: 'Documentation'
     #config.add_show_field 'objpersondepicted_ss', label: 'Person depicted', limit: true
     #config.add_show_field 'objplacedepicted_ss', label: 'Person depicted', limit: true
 
