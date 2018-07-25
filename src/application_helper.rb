@@ -9,10 +9,10 @@ module ApplicationHelper
     content_tag(:div) do
       options[:value].collect do |blob_csid|
          content_tag(:a, content_tag(:img, '',
-           src: render_csid(blob_csid, 'Thumbnail'),
+           src: render_csid(blob_csid, 'Medium'),
            class: 'thumbclass'),
-           href: render_csid(blob_csid, 'OriginalJpeg'),
-           target: 'originaljpeg',
+           href: "https://webapps.cspace.berkeley.edu/#TENANT#/imageserver/blobs/#{blob_csid}/content",
+           target: 'original',
            style: 'padding: 3px;',
            class: 'hrefclass')
       end.join.html_safe
