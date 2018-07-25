@@ -243,9 +243,15 @@ class CatalogController < ApplicationController
       ['objassoccult_txt', 'Culture or time period'],
       ['objmaker_txt', 'Maker or artist'],
       ['objmaterials_txt', 'Materials'],
+
+      ['objpersondepicted_txt', 'Person depicted'],
+      ['objplacedepicted_txt', 'Place depicted'],
+      ['objculturedepicted_txt', 'Culture depicted'],
+      ['taxon_txt', 'Taxon'],
+
       ['objinscrtext_txt', 'Inscription'],
       ['objcollector_txt', 'Collector'],
-      ['objtype_txt', 'Object Type'],
+      ['objtype_txt', 'Object type'],
       ['objfilecode_txt', 'Function'],
       ['objcontextuse_txt', 'Context of Use'],
       ['objcolldate_txt', 'Collection date'],
@@ -274,10 +280,13 @@ class CatalogController < ApplicationController
     # config.add_search_field 'objassoccult_ss', label: 'Culture or time period'
     # config.add_search_field 'objmaker_ss', label: 'Maker or artist'
     # config.add_search_field 'objmaterials_ss', label: 'Materials'
-    ## config.add_search_field 'taxon_s', label: 'Taxon'
+    ## config.add_search_field 'objpersondepicted_ss', label: 'Person depicted'
+    ## config.add_search_field 'objplacedepicted_ss', label: 'Place depicted'
+    ## config.add_search_field 'objculturedepicted_ss', label: 'Place depicted'
+    ## config.add_search_field 'taxon_ss', label: 'Taxon'
     # config.add_search_field 'objinscrtext_ss', label: 'Inscription'
     # config.add_search_field 'objcollector_ss', label: 'Collector'
-    # config.add_search_field 'objtype_s', label: 'Object Type'
+    # config.add_search_field 'objtype_s', label: 'Object type'
     # config.add_search_field 'objfilecode_ss', label: 'Function'
     # config.add_search_field 'objcontextuse_s', label: 'Context of Use'
     ## config.add_search_field 'objproddate_s', label: 'Production date'
@@ -287,9 +296,6 @@ class CatalogController < ApplicationController
     # config.add_search_field 'objkeelingser_s', label: 'Keeling series'
     
     # config.add_search_field 'objdept_s', label: 'Department'
-
-    ## config.add_search_field 'objpersondepicted_ss', label: 'Person depicted'
-    ## config.add_search_field 'objplacedepicted_ss', label: 'Person depicted'
     
     # restricted fields
     # has restrictions?
@@ -302,8 +308,8 @@ class CatalogController < ApplicationController
     config.add_show_field 'objmusno_s', label: 'Museum number'
     config.add_show_field 'objaltnum_ss', label: 'Alternate number'
     config.add_show_field 'objaccno_ss', label: 'Accession number'
-    #config.add_show_field 'objname_s', label: 'Object Name'
-    config.add_show_field 'objcount_s', label: 'Object Count'
+    #config.add_show_field 'objname_s', label: 'Object name'
+    config.add_show_field 'objcount_s', label: 'Object count'
     config.add_show_field 'objcountnote_s', label: 'Count Note'
     config.add_show_field 'objdescr_s', label: 'Description'
     config.add_show_field 'anonymousdonor_ss', label: 'Donor'
@@ -315,11 +321,15 @@ class CatalogController < ApplicationController
     config.add_show_field 'objassoccult_ss', label: 'Culture or time period'
     config.add_show_field 'objmaker_ss', label: 'Maker or artist'
     config.add_show_field 'objmaterials_ss', label: 'Materials'
+
+    config.add_show_field 'objpersondepicted_ss', label: 'Person depicted', limit: true
+    config.add_show_field 'objplacedepicted_ss', label: 'Place depicted', limit: true
+    config.add_show_field 'objculturedepicted_ss', label: 'Culture depicted', limit: true
     
-    #config.add_show_field 'taxon_s', label: 'Taxon'
+    config.add_show_field 'taxon_ss', label: 'Taxon'
     config.add_show_field 'objinscrtext_ss', label: 'Inscription'
     config.add_show_field 'objcollector_ss', label: 'Collector'
-    config.add_show_field 'objtype_s', label: 'Object Type'
+    config.add_show_field 'objtype_s', label: 'Object type'
     config.add_show_field 'objfilecode_ss', label: 'Function'
     
     config.add_show_field 'objproddate_s', label: 'Production date'
@@ -344,14 +354,16 @@ class CatalogController < ApplicationController
     config.add_show_field 'objdimensions_ss', label: 'Dimensions'
     config.add_show_field 'objtitle_s', label: 'Title'
     config.add_show_field 'objcomment_s', label: 'Comment'
-    config.add_show_field 'blob_ss', helper_method: 'render_media', label: 'Media'
+    config.add_show_field 'video_ss', helper_method: 'render_video', label: 'Video'
+    config.add_show_field 'audio_ss', helper_method: 'render_audio', label: 'Audio'
+    config.add_show_field '3d_ss', helper_method: 'render_3d', label: '3D'
+    config.add_show_field 'blob_ss', helper_method: 'render_media', label: 'Images'
     config.add_show_field 'card_ss', helper_method: 'render_media', label: 'Legacy documentation'
-    #config.add_show_field 'objpersondepicted_ss', label: 'Person depicted', limit: true
-    #config.add_show_field 'objplacedepicted_ss', label: 'Person depicted', limit: true
 
     # facet
     config.add_facet_field 'objname_s', label: 'Object name', limit: true, index_range: true
     config.add_facet_field 'objtype_s', label: 'Object type', limit: true, index_range: true
+    config.add_facet_field 'mediaavailable_ss', label: 'Media Available'
     config.add_facet_field 'objfcptree_ss', label: 'Collection place', limit: true, index_range: true
 
     config.add_facet_field("objcolldate_begin_i") do |field|
@@ -368,14 +380,19 @@ class CatalogController < ApplicationController
     config.add_facet_field 'objculturetree_ss', label: 'Culture or time period', limit: true, index_range: true
     config.add_facet_field 'objmaker_ss', label: 'Maker or artist', limit: true, index_range: true
     config.add_facet_field 'objmaterials_ss', label: 'Materials', limit: true, index_range: true
-    config.add_facet_field 'hasimages_s', label: 'Photographed'
+
+    config.add_facet_field 'taxon_ss', label: 'Taxon', limit: true, index_range: true
+    config.add_facet_field 'objpersondepicted_ss', label: 'Person depicted', limit: true, index_range: true
+    config.add_facet_field 'objplacedepicted_ss', label: 'Place depicted', limit: true, index_range: true
+    config.add_facet_field 'objculturedepicted_ss', label: 'Culture depicted', limit: true, index_range: true
+
+    #config.add_facet_field 'hasimages_s', label: 'Photographed'
     #config.add_facet_field 'imagetype_ss', label: 'Image type'
     #config.add_facet_field 'hascoords_s', label: 'Collection place mapped?'
 
     
     # subject to further review (and in some cases, implementation)
     config.add_facet_field 'objaccno_ss', label: 'Accession number', limit: true, index_range: true
-    #config.add_facet_field 'taxon_s', label: 'Taxon', limit: true, index_range: true
     config.add_facet_field 'objpp_ss', label: 'Production place', limit: true, index_range: true
     ##config.add_facet_field 'objproddate_begin_i', label: 'Production year', range: true, index_range: true
 
@@ -387,14 +404,12 @@ class CatalogController < ApplicationController
     end
 
     # careful not to uncomment this one without deleting the definition above
-    #config.add_facet_field 'objaccdate_begin_is', label: 'Accession year', range: true, index_range: true
+    ##config.add_facet_field 'objaccdate_begin_is', label: 'Accession year', range: true, index_range: true
     ##config.add_facet_field 'objacqdate_ss', label: 'Acquisition date', limit: true, index_range: true
     ##config.add_facet_field 'objacqdate_begin_is', label: 'Acquisition year', range: true, index_range: true
     config.add_facet_field 'objfilecode_ss', label: 'Function', limit: true
     #config.add_facet_field 'objkeelingser_s', label: 'Keeling series', limit: true, index_range: true
     #config.add_facet_field 'objdept_s', label: 'Department', limit: true
-    #config.add_facet_field 'objpersondepicted_ss', label: 'Person depicted', limit: true, index_range: true
-    #config.add_facet_field 'objplacedepicted_ss', label: 'Person depicted', limit: true, index_range: true
 
     # gallery
   end
