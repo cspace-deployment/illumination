@@ -29,12 +29,6 @@ class CatalogController < ApplicationController
 
     #config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
     #config.show.partials.insert(1, :openseadragon)
-    # default advanced config values
-    config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
-    # config.advanced_search[:qt] ||= 'advanced'
-    config.advanced_search[:url_key] ||= 'advanced'
-    config.advanced_search[:query_parser] ||= 'edismax'
-    config.advanced_search[:form_solr_parameters] ||= {}
 
     ## Class for sending and receiving requests from a search index
     # config.repository_class = Blacklight::Solr::Repository
