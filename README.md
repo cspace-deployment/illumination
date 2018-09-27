@@ -27,7 +27,7 @@ _NB: you'll need to be inside the Berkeley firewall or have access via the VPN (
 PAHMA Public Portal is not available to the outside world). So, start your VPN client up if needed._
 
 ```
-cd <where_you_want_to_install_blacklight> # for UCB deployments on ETS servers, this is ~/projects
+cd <where_you_want_to_install_blacklight> # for UCB deployments on RTL servers, this is ~/projects
 ```
 
 1. Get the two repos you’ll need...
@@ -37,11 +37,14 @@ git clone https://github.com/cspace-deployment/illumination.git
 git clone https://github.com/cspace-deployment/django_example_config.git
 ```
 
+NB: this step is only needed when doing a "clean install" on a new server. Once the repos are there
+the only thing you'll need to do is update them (i.e. "```git pull -v```")
+
 2. Run the script to install BL and customize for PAHMA
 
 _**A couple remarks before you kick off the install script:**_ 
 
-a. you may be asked in the middle of this to resolve one or more conflicts:
+a. you will be asked in the middle of this to resolve two conflicts:
 
 ```
    conflict  app/controllers/search_history_controller.rb
@@ -56,32 +59,36 @@ b. You’ll be asked about installing a local search form. Say y.
 Install local search form with advanced link? (y/N) y
 ```
 
-OK, now do the install. The install script takes 3 arguments: 
+OK, now do the install. The install script takes 3 or 4 arguments:
 
 ```
-./illumination/install.sh tenant app_name absolute_path_to_portal_config_file
+./illumination/install.sh tenant app_name absolute_path_to_portal_config_file [optional_version]
 ```
 
 e.g.
 
 ```
-./illumination/install.sh pahma search_pahma ~/projects/django_example_config/pahma/config/pahmapublicparms.csv 
+./illumination/install.sh pahma s2018097 ~/projects/django_example_config/pahma/config/pahmapublicparms.csv 1.1.0
 
 [...]
 ********************************************************************
-new blacklight app customized for pahma created in ~/search_pahma.
+new blacklight app customized for pahma created in ~/s2018097.
 to start it up in development:
 
-    cd search_pahma
+    cd s2018097
     rails s
 
 then visit https://localhost:3000 to test
 ********************************************************************
 ```
-3. Do as it says:
+
+This will install version 1.1.0 in the s2018097 directory.
+(NB: at RTL, the Passenger configuration points to a fixed directory which is symlinked to the deployment directory)
+
+3. To run "locally", using the development server, do as it says:
 
 ```
-cd search_pahma
+cd s2018097
 rails s
 => Booting Puma
 => Rails 5.1.4 application starting in development 
@@ -104,6 +111,9 @@ or
 
 http://localhost:3000/?utf8=%E2%9C%93&search_field=objmusno_s&q=%221-1000%22
 
+If you are deploying on an RTL server (in either the Dev or Prod environments), read the section
+on this topic below.
+
 ## Important Caveats
 
 * The current implementation expects to run Rails under Passenger with Apache. The steps to get all that set up are not described here and are dependent on OS details.
@@ -116,51 +126,53 @@ http://localhost:3000/?utf8=%E2%9C%93&search_field=objmusno_s&q=%221-1000%22
 
 * If you are doing development that requires a different Solr server, you'll need to update that in ```config/blacklight.yml```.
 
-## Install a local Solr5 server
+## Installing a local Solr5 server
 
-Typically, you'll want your own Solr server, with your own data, running on localhost.
+At the moment, the deployment assumes you'll use either the Production or Development version of the museums
+public Solr core. These are configured in ```blacklight.yml```.  You can set which Solr server is used
+using the ```RAILS_ENV``` environment variable and the ```rake migrate``` task (see below).
+
+If you want your own Solr server, with your own data, running on localhost, read on.
 
 To do this, you'll need to:
 
 1. Install Solr (we are using Solr5 at the moment, alas.)
-2. Configure Solr for the ```pahma-public``` core (see below for how to do this).
+2. Configure a Solr core, e.g. for  ```pahma-public``` (see below for how to do this).
 3. Start it up.
 4. Load some test data. (Some or all of the PAHMA public data extract, contact jblowe@berkeley.edu to get this file.)
 
 * Caveat Utilizator: many BL and other features are not working correctly at the moment; see the UCB JIRAs for details.
 
-The Solr server used for the UCB BL deployments...
+The Solr servers used for the UCB BL deployments:
+
+Development (only available to .berkeley.edu within the UCB Firewall (VPN, AirBears2, direct connect):
+
+https://webapps-dev.cspace.berkeley.edu/solr/#TENANT#-public
+
+Production:
+
+https://webapps.cspace.berkeley.edu/solr/#TENANT#-public
+
+\#TENANT# is one of (bampfa, botgarden, pahma, ucjeps)
 
 ## Google Analytics and robots.txt
 
-Google Analytics is not yet enabled for this Blacklight site.
+Google Analytics ("UA") is automatically enabled for production deployments. See e.g.
+
+```blacklight.html.erb``` (where the tracking ID is hardcoded)
+
+and
+
+```app/assets/javascripts/google_analytics.js.coffee```
+
+Yes, it is a bit complicated to get UA working in a Rails 5 app!
 
 By default, ```public/robots.txt``` block all crawlers. For deployments where you want to admit
 crawlers (e.g. production deployments) you may wish to change this. See, e.g.:
 
 https://issues.collectionspace.org/browse/DJAN-98
 
-## Running under Passenger or Rails development server
-
-On the ETS cloud server (```blacklight-(dev,prod).ets.berkeley.edu```), the RoR service
-is being running using Passenger under Apache.
-
-The Passenger gem is now required and one can start the server in at least the following ways:
-
-```bash
-export RAILS_ENV=production
-passenger start
-```
-or
-
-```bash
-export RAILS_ENV=production
-rails s
-```
-
-Then you should be able to visit the app at [http://blacklight-dev.ets.berkeley.edu:3000]
-
-## Deploying an update on the ETS Production server
+## Deploying an update on the RTL Production server
 
 Assuming that everything is updated in GitHub, here's the current working
 process. Yes, it could use some help!
@@ -168,7 +180,7 @@ process. Yes, it could use some help!
 ```
 $ ssh blacklight-prod.ets.berkeley.edu
 
-jblowe@blacklight-dev:~$ sudo su - blacklight
+jblowe@blacklight-prod:~$ sudo su - blacklight
 
 # the rails apps and their various versions are all deployed in the projects directory
 cd projects
@@ -176,10 +188,10 @@ cd projects
 rm search_pahma
 cd illumination
 git pull -v
-cd
-~/illumination/install.sh pahma s20180505 ~/projects/django_example_config/pahma/config/pahmapublicparms.csv
-cd projects/s20180505/
-# remake the two symlinks...
+cd ..
+./illumination/install.sh pahma s20180505 ~/projects/django_example_config/pahma/config/pahmapublicparms.csv
+cd ~/projects/s20180505/
+# remake the two symlinks...(prod only. you can skip this on dev)
 # link the log dir to the "permanent" log dir
 rm -rf log/
 ln -s /var/log/blacklight/pahma log
@@ -191,17 +203,22 @@ bundle install
 export RAILS_ENV=production
 rake db:migrate
 # remake the symlink between the actual directory and the directory passenger expects
-cd
 ./relink.sh s20180505
+# you'll need to restart apache. the blacklight sudo user can't do that, so you'll need to:
+exit
+sudo apache2ctl restart
 ```
 
-NB: it could be that you'll need to check some of the secret keys...
+NB: if for some reason you need to check or change some of the secret keys...
 ```
-# the secret key is now set in the environment. but you could do it here:
+# to check that it is indeed set in the environment
+printenv | grep SECRET_KEY
+SECRET_KEY_BASE=xxxxxxxxxxxxxxxxxxxxxx...
+# here's where it is accessed:
 vi config/secrets.yml 
-# and here:
+# and here (devise can have its own, if you really wanted to...)
 vi config/initializers/devise.rb
-# you'd need to re-apply migrations
+# you need to re-apply migrations if you change anything
 rake db:migrate
 ```
 
@@ -210,15 +227,15 @@ Other things to consider:
 # if a production deployment, don't forget to remove robots.txt
 rm public/robots.txt
 
-# passenger expect the code to be deployed in a fixed directory, e.g. 'search_pahma'
+# passenger expects the code to be deployed in a fixed directory, e.g. 'search_pahma'
 # the relink script will do that as shown above:
 ./relink.sh s20180505
 
 # or you can do it by hand:
-# make a symlink
+# remove and remake the symlink
+rm search_pahma
 ln -s s20180505 search_pahma
 cd search_pahma
-bundle install
 
 # ok now you can restart apache (probably you'll need to exit the app user account to do it):
 exit
@@ -226,6 +243,60 @@ sudo apache2ctl graceful
 
 # or run under passenger or rails dev server (see above)
 ```
+
+Here's what we have for ~/.profile now (need to setup RVM and SECRET_KEY_BASE)
+
+```
+blacklight@blacklight-dev:~$ cat .profile
+# ~/.profile: executed by the command interpreter for login shells.
+# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
+# exists.
+# see /usr/share/doc/bash/examples/startup-files for examples.
+# the files are located in the bash-doc package.
+
+# the default umask is set in /etc/profile; for setting the umask
+# for ssh logins, install and configure the libpam-umask package.
+#umask 022
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+	. "$HOME/.bashrc"
+    fi
+fi
+
+# set PATH so it includes user's private bin directories
+PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+# Blacklight / RoR needs this in the environment
+export SECRET_KEY_BASE=yougottaputsomethingsuitablehere
+```
+
+## Running under Passenger or Rails development server
+
+On the RTL cloud server (```blacklight-(dev,prod).ets.berkeley.edu```), the RoR service
+is being running using Passenger under Apache.
+
+The Passenger gem is now required and one can start the server in at least the following ways:
+
+```bash
+export RAILS_ENV=development
+passenger start
+```
+or
+
+```bash
+export RAILS_ENV=production
+rails s
+```
+
+Then you should be able to visit the app at [http://portal-dev.hearstmuseum.berkeley.edu]
 
 ## About the production parameters
 
@@ -249,7 +320,7 @@ diff config/environments/production.rb ~/production.rb
 
 ## Monitoring with god
 
-On EC2, the RoR services have been monitored using ```god```.
+On EC2, the RoR services had been monitored using ```god```.
 
 In this repo there is a file called ```howto-ec2.txt``` which shows how
 to configure an EC2 instance with the UCB demo portals and ```god```.
