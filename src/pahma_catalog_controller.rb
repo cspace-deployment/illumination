@@ -27,9 +27,6 @@ class CatalogController < ApplicationController
     config.show.document_actions.delete(:sms)
     config.show.document_actions.delete(:email)
 
-    #config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
-    #config.show.partials.insert(1, :openseadragon)
-
     ## Class for sending and receiving requests from a search index
     # config.repository_class = Blacklight::Solr::Repository
     #
@@ -247,7 +244,7 @@ class CatalogController < ApplicationController
       ['objcollector_txt', 'Collector'],
       ['objtype_txt', 'Object type'],
       ['objfilecode_txt', 'Function'],
-      ['objcontextuse_txt', 'Context of Use'],
+      ['objcontextuse_txt', 'Context of use'],
       ['objcolldate_txt', 'Collection date'],
       ['objkeelingser_txt', 'Keeling series'],
       ['objdept_txt', 'Department']
@@ -282,7 +279,7 @@ class CatalogController < ApplicationController
     # config.add_search_field 'objcollector_ss', label: 'Collector'
     # config.add_search_field 'objtype_s', label: 'Object type'
     # config.add_search_field 'objfilecode_ss', label: 'Function'
-    # config.add_search_field 'objcontextuse_s', label: 'Context of Use'
+    # config.add_search_field 'objcontextuse_s', label: 'Context of use'
     ## config.add_search_field 'objproddate_s', label: 'Production date'
     ## config.add_search_field 'objacqdate_ss', label: 'Acquisition date'
     # config.add_search_field 'objcolldate_s', label: 'Collection date'
@@ -304,7 +301,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'objaccno_ss', label: 'Accession number'
     #config.add_show_field 'objname_s', label: 'Object name'
     config.add_show_field 'objcount_s', label: 'Object count'
-    config.add_show_field 'objcountnote_s', label: 'Count Note'
+    config.add_show_field 'objcountnote_s', label: 'Count note'
     config.add_show_field 'objdescr_s', label: 'Description'
     config.add_show_field 'anonymousdonor_ss', label: 'Donor'
     config.add_show_field 'objfcp_s', label: 'Collection place'
@@ -357,7 +354,7 @@ class CatalogController < ApplicationController
     # facet
     config.add_facet_field 'objname_s', label: 'Object name', limit: true, index_range: true
     config.add_facet_field 'objtype_s', label: 'Object type', limit: true, index_range: true
-    config.add_facet_field 'mediaavailable_ss', label: 'Media Available'
+    config.add_facet_field 'mediaavailable_ss', label: 'Media available'
     config.add_facet_field 'objfcptree_ss', label: 'Collection place', limit: true, index_range: true
 
     config.add_facet_field("objcolldate_begin_i") do |field|
@@ -366,9 +363,9 @@ class CatalogController < ApplicationController
       field.range = true
       field.index_range = true
     end
-
     # careful not to uncomment this one without deleting the definition above
     #config.add_facet_field 'objcolldate_begin_i', label: 'Year collected', range: true, index_range: true
+
     config.add_facet_field 'objcollector_ss', label: 'Collector', limit: true, index_range: true
     config.add_facet_field 'anonymousdonor_ss', label: 'Donor', limit: true, index_range: true
     config.add_facet_field 'objculturetree_ss', label: 'Culture or time period', limit: true, index_range: true
@@ -384,7 +381,6 @@ class CatalogController < ApplicationController
     #config.add_facet_field 'imagetype_ss', label: 'Image type'
     #config.add_facet_field 'hascoords_s', label: 'Collection place mapped?'
 
-    
     # subject to further review (and in some cases, implementation)
     config.add_facet_field 'objaccno_ss', label: 'Accession number', limit: true, index_range: true
     config.add_facet_field 'objpp_ss', label: 'Production place', limit: true, index_range: true
@@ -396,9 +392,9 @@ class CatalogController < ApplicationController
       field.range = true
       field.index_range = true
     end
-
     # careful not to uncomment this one without deleting the definition above
     ##config.add_facet_field 'objaccdate_begin_is', label: 'Accession year', range: true, index_range: true
+
     ##config.add_facet_field 'objacqdate_ss', label: 'Acquisition date', limit: true, index_range: true
     ##config.add_facet_field 'objacqdate_begin_is', label: 'Acquisition year', range: true, index_range: true
     config.add_facet_field 'objfilecode_ss', label: 'Function', limit: true
