@@ -48,18 +48,22 @@ The install script takes 4 arguments:
 ./illumination/install.sh tenant app_name absolute_path_to_portal_config_file version
 ```
 
-e.g. on your "local system", where the "home directory" for Blacklight is ```~```:
+e.g. on your "local system", where the "home directory" for Blacklight is, say, ```~```:
 
 ```
 ./illumination/install.sh pahma s20180927 ~/django_example_config/pahma/config/pahmapublicparms.csv 1.1.0
 
 [...]
 ********************************************************************
-new blacklight app customized for pahma created in /Users/myhome/s20180927.
+new blacklight app (version 1.1.0) customized for pahma created in /Users/myhome/s20180927.
 to start it up in development:
 
     cd s20180927
     rails s
+
+    or
+
+    passenger start
 
 then visit https://localhost:3000 to test
 ********************************************************************
@@ -67,8 +71,11 @@ then visit https://localhost:3000 to test
 
 This will install version 1.1.0 in the ~/s2018097 directory.
 
+3. To run "locally", using the development server, do as it says.
 
-3. To run "locally", using the development server, do as it says:
+  _NB: make sure you either are inside the UCB firewall (VPN, etc.)
+        or that a proper Solr server is configured in the development section
+        in config/blacklight.yml_
 
 ```
 cd s2018097
@@ -99,25 +106,25 @@ If you are deploying on an RTL server (in either the Dev or Prod environments), 
 ## Deploying an update on the RTL server (either Production or Development)
 
 * On RTL servers  the "home directory" for Blacklight is ```~/projects```.
-* The Passenger configuration points to a fixed directory which is symlinked to the deployment directory.
+* The Passenger / Apache configuration points to a fixed directory which is symlinked to the deployment directory.
 * The dialog below assumes you are deploying the 'pahma' Portal.
 * You'll need to have the version number you wish to deploy (e.g. "1.1.0" is shown in the example below) before you start.
-You can check the tags in the repo (e.g. ```git tag```) to find what versions are available.
+* You can check the tags in the repo (e.g. ```git tag```) to find what versions are available.
 
 ```
 $ ssh blacklight-prod.ets.berkeley.edu
 
 jblowe@blacklight-prod:~$ sudo su - blacklight
 
-# the rails apps and their various versions are all deployed in the projects directory
+# the rails apps and their various versions are all deployed in the ~/projects directory
 
 # first, get the latest code
-cd illumination ; git pull -v
+cd ~/projects/illumination ; git pull -v
 cd ~/projects/django_example_config ; git pull -v
 
-# deploy the desired version of the Blacklight RoR app in a new directory
-./illumination/install.sh pahma s20180505 ~/projects/django_example_config/pahma/config/pahmapublicparms.csv 1.1.0
-cd ~/projects/s20180505/
+# deploy the desired version of the Blacklight RoR app in a new directory (we've been
+# using directory names of the form sYYYYMMDD; but do as you like!)
+./illumination/install.sh pahma s20181015 ~/projects/django_example_config/pahma/config/pahmapublicparms.csv 1.2.0 development &
 
 # remake the two symlinks...(prod only. you can skip this on dev)
 # link the log dir to the "permanent" log dir
@@ -132,7 +139,7 @@ export RAILS_ENV=production
 rake db:migrate
 
 # remake the symlink between the actual directory and the directory passenger expects (e.g. 'search_pahma')
-../illumination/relink.sh s20180505 search_pahma
+./illumination/relink.sh s20181015 pahma production
 
 # you'll need to restart apache. the blacklight sudo user can't do that, so you'll need to:
 exit
@@ -140,13 +147,14 @@ sudo apache2ctl restart
 ```
 
 NB: if for some reason you need to check or change some of the secret keys...
+
 ```
 # to check that it is indeed set in the environment
 printenv | grep SECRET_KEY
 SECRET_KEY_BASE=xxxxxxxxxxxxxxxxxxxxxx...
 # here's where it is accessed:
 vi config/secrets.yml 
-# and here (devise can have its own, if you really wanted to...)
+# and here (devise CAN have its own, if you really wanted to...)
 vi config/initializers/devise.rb
 # you need to re-apply migrations if you change anything
 rake db:migrate
