@@ -7,7 +7,12 @@ portal_config_file=$3
 tag=$4
 deployment=$5
 current_directory=`pwd`
-echo "pwd = ${current_directory}"
+
+# this function cpalways wraps cp so that it always succeeds
+# since we have set -e and since some of the files deployed may or may not exist for
+# particular deployments, we need to prevent the script from stopping in this case.
+# note it only works for copying single files.
+# yes, this coulda been done with rsync or other shell tricks. but this is the way I did it.
 
 function cpalways()
 {
@@ -20,32 +25,51 @@ function cpalways()
   return 0
 }
 
+# check the command line parameters
+
 if [ -d "${app_name}" ]; then
   echo "Target directory ${app_name} already exists; please remove first."
-  echo "$0 tenant app_name portal_config_file [tag] [production]"
+  echo "$0 tenant app_name portal_config_file tag|master production|development"
   exit
 fi
 
 if [ ! -f "${portal_config_file}" ]; then
-  echo "Can't find ${portal_config_file}. Please verify name and location"
-  echo "$0 tenant app_name portal_config_file [tag] [production]"
+  echo "Can't find portal config file '${portal_config_file}'. Please verify name and location"
+  echo "$0 tenant app_name portal_config_file tag|master production|development"
   exit
 fi
-
-echo "Creating new rails app in ${app_name}..."
-rails new ${app_name} -m https://raw.github.com/projectblacklight/blacklight/master/template.demo.rb > install.log
 
 source_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/src"
 working_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/working_dir"
 
+if [ ! -d "${source_dir}" ]; then
+  echo "Can't find directory '${source_dir}'. Please verify you are running this script from within the repo"
+  echo "$0 tenant app_name portal_config_file tag|master production|development"
+  exit
+fi
+
+# make sure we have the right code available
 cd ${source_dir}
 
-if [ -z "${tag}" ]; then
+if [ "${tag}" == "master" ]; then
   echo "deploying master branch"
+  git checkout master
+elif [ "${tag}" == "notag" ]; then
+  echo "deploying current (possibly uncommitted) code, as is"
+elif [ `git tag --list "${tag}"` ]; then
+    echo "deploying tag ${tag} from GitHub"
+    #git checkout ${tag}
 else
-  git checkout ${tag}
-  echo "deploying tag ${tag} from GitHub"
+    echo "could not find tag '${tag}'. we need a valid tag, or 'notag' for current (possibly uncommitted) code, or 'master' for master branch"
+    exit
 fi
+
+cd ${current_directory}
+
+echo "Creating new rails app in ${current_directory}/${app_name}..."
+rails new ${app_name} -m https://raw.github.com/projectblacklight/blacklight/master/template.demo.rb > install.log
+
+cd ${source_dir}
 
 echo "Copying Blacklight customized source code from from ${source_dir} to ${working_dir}"
 
@@ -78,15 +102,14 @@ cpalways ${working_dir}/catalog_controller.rb app/controllers/
 cpalways ${working_dir}/search_history_controller.rb app/controllers/
 
 mkdir -p app/helpers/blacklight
-# diff ${working_dir}/catalog_helper_behavior.rb app/helpers/blacklight/
 cpalways ${working_dir}/catalog_helper_behavior.rb app/helpers/blacklight/
 
 if [ "${deployment}" == "production" ]; then
-  bundle install --deployment > bundle.log
   echo "deploying to production"
+  bundle install --deployment > bundle.log
 else
-  bundle install > bundle.log
   echo "deploying for development (may overwrite Gemfile.lock, etc.)"
+  bundle install > bundle.log
 fi
 
 # stop the troublesome spring server, for now
@@ -103,12 +126,12 @@ bin/spring stop
 cpalways ${working_dir}/blacklight.html.erb app/views/layouts/
 cpalways ${working_dir}/google_analytics.js.coffee app/assets/javascripts/
 
-# additional customization of templates and css
-cpalways ${working_dir}/*.svg public/
-cpalways ${working_dir}/*.png public/
+# additional customization of static files, templates, and css
+cp ${working_dir}/*.svg public/
+cp ${working_dir}/*.png public/
+cp ${working_dir}/splash_images/* public/
 cpalways ${working_dir}/robots.txt public/
 cpalways ${working_dir}/header-logo-${tenant}.png public/header-logo.png
-cp ${working_dir}/splash_images/* public/
 cp -r ${working_dir}/fonts public/
 # the favicon only needs to go one place, but I'm not sure which of the two possibilities is right.
 # so for now, put it in both places.
@@ -127,7 +150,6 @@ cpalways ${working_dir}/_advanced_search_form.html.erb app/views/advanced/
 
 cpalways ${working_dir}/_user_util_links.html.erb app/views/
 
-# diff ${working_dir}/${tenant}_catalog_controller.rb app/controllers/catalog_controller.rb
 cpalways ${working_dir}/${tenant}_catalog_controller.rb app/controllers/catalog_controller.rb
 cpalways ${working_dir}/${tenant}_search_history_controller.rb app/controllers/search_history_controller.rb
 
@@ -150,18 +172,19 @@ cpalways ${working_dir}/${tenant}_extras.scss app/assets/stylesheets/extras.scss
 
 cpalways ${working_dir}/blacklight.scss app/assets/stylesheets/
 
-# remove this when the footer refactoring is done.
-cpalways ${working_dir}/${tenant}_application.css app/assets/stylesheets/application.css
-
 rm -rf ${working_dir}
 
 echo
 echo "********************************************************************"
-echo "new blacklight app customized for ${tenant} created in ${current_directory}/${app_name}."
-echo "to start it up in development:"
+echo "new blacklight app (version ${tag}) customized for ${tenant} created in ${current_directory}/${app_name}"
+echo "to start it up in development mode:"
 echo ""
 echo "    cd ${current_directory}/${app_name}"
 echo "    rails s"
+echo ""
+echo "    or"
+echo ""
+echo "    passenger start"
 echo ""
 echo "then visit https://localhost:3000 to test"
 echo "********************************************************************"
