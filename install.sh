@@ -58,7 +58,7 @@ elif [ "${tag}" == "notag" ]; then
   echo "deploying current (possibly uncommitted) code, as is"
 elif [ `git tag --list "${tag}"` ]; then
     echo "deploying tag ${tag} from GitHub"
-    #git checkout ${tag}
+    git checkout ${tag}
 else
     echo "could not find tag '${tag}'. we need a valid tag, or 'notag' for current (possibly uncommitted) code, or 'master' for master branch"
     exit
