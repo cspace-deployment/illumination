@@ -21,7 +21,7 @@ http://projectblacklight.org/
 
 ## Initial Installation (i.e. on a new server)
 
-To install the rickety PAHMA customizations:
+To install the rickety CSpace Blacklight customizations:
 
 _NB: you'll need to be inside the Berkeley firewall or have access via the VPN (the Solr server for the 
 PAHMA Public Portal is not available to the outside world). So, start your VPN client up if needed._
@@ -42,23 +42,31 @@ the only thing you'll need to do is update them (i.e. "```git pull -v```")
 
 2. Run the script to install BL and customize for e.g. PAHMA
 
-The install script takes 4 arguments:
+The install script takes 5 arguments:
 
 ```
-./illumination/install.sh tenant app_name absolute_path_to_portal_config_file version
+./illumination/install.sh tenant app_name absolute_path_to_portal_config_file version production|development
 ```
+
+tenant: one of the 'authorized' labels for a CSpace tenant: bampfa, botgarden, cinefiles, pahma, ucjeps
+app_name: this will be both the Ruby "application name" and the directory where the code is installed.
+absolute_path_to_portal_config_file: this will be the full path to the ```django_example_config``` directory you cloned
+version: i.e. tag in GitHub, something like '1.2.0' if you want to deploy your (perhaps modified) code, use 'notag',
+         to deploy the current tip of the master branch use 'master'
+type of deployment: 'production' or 'development'
 
 e.g. on your "local system", where the "home directory" for Blacklight is, say, ```~```:
 
 ```
-./illumination/install.sh pahma s20180927 ~/django_example_config/pahma/config/pahmapublicparms.csv 1.1.0
+cd
+./illumination/install.sh pahma s20181015 ~/django_example_config/pahma/config/pahmapublicparms.csv 1.2.0 development
 
 [...]
 ********************************************************************
-new blacklight app (version 1.1.0) customized for pahma created in /Users/myhome/s20180927.
+new blacklight app (version 1.2.0) customized for pahma created in /Users/myhome/s20180927.
 to start it up in development:
 
-    cd s20180927
+    cd s20181015
     rails s
 
     or
@@ -69,7 +77,7 @@ then visit https://localhost:3000 to test
 ********************************************************************
 ```
 
-This will install version 1.1.0 in the ~/s2018097 directory.
+This will install version 1.2.0 in the s20181015 directory wherever you invoked the script from.
 
 3. To run "locally", using the development server, do as it says.
 
@@ -78,7 +86,7 @@ This will install version 1.1.0 in the ~/s2018097 directory.
         in config/blacklight.yml_
 
 ```
-cd s2018097
+cd s20181015
 rails s
 => Booting Puma
 => Rails 5.1.4 application starting in development 
@@ -126,7 +134,16 @@ cd ~/projects/django_example_config ; git pull -v
 # using directory names of the form sYYYYMMDD; but do as you like!)
 ./illumination/install.sh pahma s20181015 ~/projects/django_example_config/pahma/config/pahmapublicparms.csv 1.2.0 development &
 
-# remake the two symlinks...(prod only. you can skip this on dev)
+
+# nb: the following script ONLY works on RTL servers configured the way they are configured!
+# i.e. code and deployment dirs in ~/projects, logs and dbs in /var, etc.
+#
+# remake the symlink between the actual directory and the directory passenger expects (e.g. 'search_pahma')
+./illumination/relink.sh s20181015 pahma production
+
+# here's basically what the relink.sh script does (for production), in case you want to know or do it by hand.
+#
+# remake the two internal symlinks...(prod only. you can skip this on dev)
 # link the log dir to the "permanent" log dir
 rm -rf log/
 ln -s /var/log/blacklight/pahma log
@@ -138,9 +155,6 @@ ln -s /var/blacklight-db/pahma db
 export RAILS_ENV=production
 rake db:migrate
 
-# remake the symlink between the actual directory and the directory passenger expects (e.g. 'search_pahma')
-./illumination/relink.sh s20181015 pahma production
-
 # you'll need to restart apache. the blacklight sudo user can't do that, so you'll need to:
 exit
 sudo apache2ctl restart
@@ -149,7 +163,7 @@ sudo apache2ctl restart
 NB: if for some reason you need to check or change some of the secret keys...
 
 ```
-# to check that it is indeed set in the environment
+# to check that it is indeed set in the environment (on prod...
 printenv | grep SECRET_KEY
 SECRET_KEY_BASE=xxxxxxxxxxxxxxxxxxxxxx...
 # here's where it is accessed:

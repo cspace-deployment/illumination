@@ -115,9 +115,10 @@ fi
 # stop the troublesome spring server, for now
 bin/spring stop
 
-rails generate blacklight_range_limit:install
-rails generate blacklight_gallery:install
-rails generate blacklight_advanced_search:install
+# TODO fix this: --force needed for now as there is a conflict between range limit and advanced search
+rails generate blacklight_range_limit:install --force
+rails generate blacklight_gallery:install --force
+rails generate blacklight_advanced_search:install --force
 
 # stop the troublesome spring server again, for now
 bin/spring stop
