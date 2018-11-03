@@ -354,7 +354,7 @@ class CatalogController < ApplicationController
     # facet
     config.add_facet_field 'objname_s', label: 'Object name', limit: true, index_range: true
     config.add_facet_field 'objtype_s', label: 'Object type', limit: true, index_range: true
-    config.add_facet_field 'mediaavailable_ss', label: 'Media available'
+    config.add_facet_field 'media_available_ss', label: 'Media available'
     config.add_facet_field 'objfcptree_ss', label: 'Collection place', limit: true, index_range: true
 
     config.add_facet_field("objcolldate_begin_i") do |field|
