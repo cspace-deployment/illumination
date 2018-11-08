@@ -106,19 +106,19 @@ cpalways ${working_dir}/catalog_helper_behavior.rb app/helpers/blacklight/
 
 if [ "${deployment}" == "production" ]; then
   echo "deploying to production"
-  bundle install --deployment > bundle.log
+  bundle install --deployment >> ${current_directory}/install.log
 else
   echo "deploying for development (may overwrite Gemfile.lock, etc.)"
-  bundle install > bundle.log
+  bundle install >> ${current_directory}/install.log
 fi
 
 # stop the troublesome spring server, for now
 bin/spring stop
 
 # TODO fix this: --force needed for now as there is a conflict between range limit and advanced search
-rails generate blacklight_range_limit:install --force
-rails generate blacklight_gallery:install --force
-rails generate blacklight_advanced_search:install --force
+rails generate blacklight_range_limit:install --force >> ${current_directory}/install.log
+rails generate blacklight_gallery:install --force >> ${current_directory}/install.log
+rails generate blacklight_advanced_search:install --force >> ${current_directory}/install.log
 
 # stop the troublesome spring server again, for now
 bin/spring stop

@@ -19,7 +19,7 @@ https://github.com/projectblacklight/blacklight/wiki/Quickstart
 
 http://projectblacklight.org/
 
-## Initial Installation (i.e. on a new server)
+## Initial Installation (i.e. on a new server, including your own laptop)
 
 To install the rickety CSpace Blacklight customizations:
 
@@ -118,6 +118,8 @@ If you are deploying on an RTL server (in either the Dev or Prod environments), 
 * The dialog below assumes you are deploying the 'pahma' Portal.
 * You'll need to have the version number you wish to deploy (e.g. "1.1.0" is shown in the example below) before you start.
 * You can check the tags in the repo (e.g. ```git tag```) to find what versions are available.
+* The instructions below are for 'production'. For installation on dev, change 'production' to 'development' everywhere.
+* For an initial deployment, make sure the two environment variables ```SECRET_KEY_BASE``` and ```RAILS_ENV``` are set (usually in .profile)
 
 ```
 $ ssh blacklight-prod.ets.berkeley.edu
@@ -132,8 +134,7 @@ cd ~/projects/django_example_config ; git pull -v
 
 # deploy the desired version of the Blacklight RoR app in a new directory (we've been
 # using directory names of the form sYYYYMMDD; but do as you like!)
-./illumination/install.sh pahma s20181015 ~/projects/django_example_config/pahma/config/pahmapublicparms.csv 1.2.0 development &
-
+./illumination/install.sh pahma s20181015 ~/projects/django_example_config/pahma/config/pahmapublicparms.csv 1.2.0 production &
 
 # nb: the following script ONLY works on RTL servers configured the way they are configured!
 # i.e. code and deployment dirs in ~/projects, logs and dbs in /var, etc.
@@ -141,7 +142,17 @@ cd ~/projects/django_example_config ; git pull -v
 # remake the symlink between the actual directory and the directory passenger expects (e.g. 'search_pahma')
 ./illumination/relink.sh s20181015 pahma production
 
-# here's basically what the relink.sh script does (for production), in case you want to know or do it by hand.
+# we need to do the migration...
+cd ~/projects/s20181015
+RAILS_ENV=production rake db:migrate
+
+# you'll need to restart apache. the blacklight sudo user can't do that, so you'll need to:
+exit
+sudo apache2ctl restart
+
+# NB: here's basically what the relink.sh script does (for production), in case you want to know or do it by hand.
+# (for development deployments, the log and db symlinks are not made. This is so that the logs (and d)bs)
+# are keep separate and fresh for each deployment...
 #
 # remake the two internal symlinks...(prod only. you can skip this on dev)
 # link the log dir to the "permanent" log dir
@@ -150,14 +161,6 @@ ln -s /var/log/blacklight/pahma log
 # link the db directory to the "permanent" db directory
 rm -rf db
 ln -s /var/blacklight-db/pahma db
-
-# we need to do the migration...
-export RAILS_ENV=production
-rake db:migrate
-
-# you'll need to restart apache. the blacklight sudo user can't do that, so you'll need to:
-exit
-sudo apache2ctl restart
 ```
 
 NB: if for some reason you need to check or change some of the secret keys...
@@ -207,10 +210,11 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 # Blacklight / RoR needs this in the environment
 export SECRET_KEY_BASE=yougottaputsomethingsuitablehere
+export RAILS_ENV=production
 ```
 
-Backing up database..
-other maintenance..
+Backing up database...
+other maintenance...
 
 ## Running under Passenger or Rails development server
 
@@ -220,9 +224,10 @@ is being running using Passenger under Apache.
 The Passenger gem is now required and one can start the server in at least the following ways:
 
 ```bash
-export RAILS_ENV=development
+export RAILS_ENV=production
 passenger start
 ```
+
 or
 
 ```bash
@@ -258,7 +263,8 @@ diff config/environments/production.rb ~/production.rb
 
 * This deployment expects to be able to access the public PAHMA Solr server at:
 
-  https://webapps-dev.cspace.berkeley.edu/solr/pahma-public
+  https://webapps.cspace.berkeley.edu/solr/pahma-public (for production) or
+  https://webapps-dev.cspace.berkeley.edu/solr/pahma-public (for development) or
 
   This service _is_ available inside the UCB firewall. If you are outside, you'll need to install your own (local) Solr server with this core.
 
