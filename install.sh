@@ -117,9 +117,12 @@ bin/spring stop
 
 # TODO fix this: --force needed for now as there is a conflict between range limit and advanced search
 rails generate blacklight_range_limit:install --force >> ${current_directory}/install.log
+# stop the troublesome spring server again, for now
+bin/spring stop
 rails generate blacklight_gallery:install --force >> ${current_directory}/install.log
+# stop the troublesome spring server again, for now
+bin/spring stop
 rails generate blacklight_advanced_search:install --force >> ${current_directory}/install.log
-
 # stop the troublesome spring server again, for now
 bin/spring stop
 

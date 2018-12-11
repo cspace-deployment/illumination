@@ -19,14 +19,15 @@ module ApplicationHelper
     end
   end
 
-  def render_audio options={}
+  # use imageserver and blob csid to serve audio
+  def render_audio_csid options={}
     # render audio player
     content_tag(:div) do
       options[:value].collect do |audio_csid|
         content_tag(:audio,
           content_tag(:source, "I'm sorry; your browser doesn't support HTML5 audio in MPEG format.",
              src: "https://webapps.cspace.berkeley.edu/#TENANT#/imageserver/blobs/#{audio_csid}/content",
-             id: 'audio',
+             id: 'audio_csid',
              type: 'audio/mpeg'),
              controls: 'controls',
              style: 'height: 60px; width: 640px;')
@@ -34,20 +35,58 @@ module ApplicationHelper
     end
   end
 
-  def render_video options={}
+  # use imageserver and blob csid to serve video
+  def render_video_csid options={}
     # render video player
     content_tag(:div) do
       options[:value].collect do |video_csid|
         content_tag(:video,
           content_tag(:source, "I'm sorry; your browser doesn't support HTML5 video in MP4 with H.264.",
              src: "https://webapps.cspace.berkeley.edu/#TENANT#/imageserver/blobs/#{video_csid}/content",
-             id: 'video',
+             id: 'video_csid',
              type: 'video/mp4'),
              controls: 'controls',
              style: 'width: 640px;')
       end.join.html_safe
     end
   end
+
+  # serve audio directy via apache (apache needs to be configured to serve nuxeo repo
+  def render_audio_directly options={}
+    # render audio player
+    content_tag(:div) do
+      options[:value].collect do |audio_md5|
+        l1 = audio_md5[0..1]
+        l2 = audio_md5[2..3]
+        content_tag(:audio,
+          content_tag(:source, "I'm sorry; your browser doesn't support HTML5 audio in MPEG format.",
+             src: "https://cspace-dev-01.ist.berkeley.edu/#TENANT#_nuxeo/data/#{l1}/#{l2}/#{audio_md5}",
+             id: 'audio_md5',
+             type: 'audio/mpeg'),
+             controls: 'controls',
+             style: 'height: 60px; width: 640px;')
+      end.join.html_safe
+    end
+  end
+
+  # serve audio directy via apache (apache needs to be configured to serve nuxeo repo
+  def render_video_directly options={}
+    # render video player
+    content_tag(:div) do
+      options[:value].collect do |video_md5|
+        l1 = video_md5[0..1]
+        l2 = video_md5[2..3]
+        content_tag(:video,
+          content_tag(:source, "I'm sorry; your browser doesn't support HTML5 video in MP4 with H.264.",
+             src: "https://cspace-dev-01.ist.berkeley.edu/#TENANT#_nuxeo/data/#{l1}/#{l2}/#{video_md5}",
+             id: 'video_md5',
+             type: 'video/mp4'),
+             controls: 'controls',
+             style: 'width: 640px;')
+      end.join.html_safe
+    end
+  end
+
 
   def render_3d options={}
     # render 3d object
