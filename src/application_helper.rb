@@ -66,7 +66,7 @@ module ApplicationHelper
         l2 = audio_md5[2..3]
         content_tag(:audio,
           content_tag(:source, "I'm sorry; your browser doesn't support HTML5 audio in MPEG format.",
-             src: "https://cspace-dev-01.ist.berkeley.edu/#TENANT#_nuxeo/data/#{l1}/#{l2}/#{audio_md5}",
+             src: "https://cspace-prod-02.ist.berkeley.edu/#TENANT#_nuxeo/data/#{l1}/#{l2}/#{audio_md5}",
              id: 'audio_md5',
              type: 'audio/mpeg'),
              controls: 'controls',
@@ -84,7 +84,7 @@ module ApplicationHelper
         l2 = video_md5[2..3]
         content_tag(:video,
           content_tag(:source, "I'm sorry; your browser doesn't support HTML5 video in MP4 with H.264.",
-             src: "https://cspace-dev-01.ist.berkeley.edu/#TENANT#_nuxeo/data/#{l1}/#{l2}/#{video_md5}",
+             src: "https://cspace-prod-02.ist.berkeley.edu/#TENANT#_nuxeo/data/#{l1}/#{l2}/#{video_md5}",
              id: 'video_md5',
              type: 'video/mp4'),
              controls: 'controls',
