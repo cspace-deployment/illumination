@@ -212,6 +212,7 @@ class CatalogController < ApplicationController
     config.index.title_field =  'objname_s'
     config.show.title_field =  'objname_s'
     # index
+    config.add_index_field 'deaccessioned_s', helper_method: 'render_status', label: 'Object status'
     config.add_index_field 'objmusno_s', label: 'Museum number'
     config.add_index_field 'objassoccult_ss', label: 'Culture or time period'
     config.add_index_field 'objmaker_ss', label: 'Maker or artist'
@@ -296,6 +297,7 @@ class CatalogController < ApplicationController
     # group
     
     # show
+    config.add_show_field 'deaccessioned_s', helper_method: 'render_status', label: 'Object status'
     config.add_show_field 'objmusno_s', label: 'Museum number'
     config.add_show_field 'objaltnum_ss', label: 'Alternate number'
     config.add_show_field 'objaccno_ss', label: 'Accession number'

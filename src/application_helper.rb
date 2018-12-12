@@ -4,6 +4,12 @@ module ApplicationHelper
       "https://webapps.cspace.berkeley.edu/#TENANT#/imageserver/blobs/#{csid}/derivatives/#{derivative}/content"
   end
 
+  def render_status options={}
+      options[:value].collect do |status|
+        content_tag(:span, status, style: 'color: red;')
+      end.join(', ').html_safe
+  end
+
   def render_media options={}
     # return a list of cards or images
     content_tag(:div) do
