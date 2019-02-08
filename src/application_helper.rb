@@ -57,7 +57,7 @@ module ApplicationHelper
     end
   end
 
-  # serve audio directy via apache (apache needs to be configured to serve nuxeo repo
+  # serve audio directy via apache (apache needs to be configured to serve nuxeo repo)
   def render_audio_directly options={}
     # render audio player
     content_tag(:div) do
@@ -75,7 +75,7 @@ module ApplicationHelper
     end
   end
 
-  # serve audio directy via apache (apache needs to be configured to serve nuxeo repo
+  # serve audio directy via apache (apache needs to be configured to serve nuxeo repo)
   def render_video_directly options={}
     # render video player
     content_tag(:div) do
@@ -94,19 +94,40 @@ module ApplicationHelper
   end
 
 
-  def render_3d options={}
-    # render 3d object
+  def render_x3d_csid options={}
+    # render x3d object
     content_tag(:div) do
-      options[:value].collect do |d3_csid|
-        content_tag(:d3,
-          content_tag(:source, "I'm sorry; your browser doesn't support 3D rendering.",
-             src: "https://webapps.cspace.berkeley.edu/#TENANT#/imageserver/blobs/#{d3_csid}/content",
-             id: 'd3',
-             type: 'd3/mpeg'),
+      options[:value].collect do |x3d_csid|
+        content_tag(:x3d, style: 'width: 640px;',
+          content_tag(:scene,
+              content_tag(:inline,
+                 url: "https://webapps.cspace.berkeley.edu/#TENANT#/imageserver/blobs/#{x3d_csid}/content",
+                 id: 'x3d',
+                 type: 'model/x3d+xml')
+           )
+          )
+      end.join.html_safe
+    end
+  end
+
+
+  # serve X3D directy via apache (apache needs to be configured to serve nuxeo repo)
+  def render_x3d_directly options={}
+    # render x3d player
+    content_tag(:div) do
+      options[:value].collect do |x3d_md5|
+        l1 = x3d_md5[0..1]
+        l2 = x3d_md5[2..3]
+        content_tag(:video,
+          content_tag(:source, "I'm sorry; your browser doesn't support HTML5 video in MP4 with H.264.",
+             src: "https://cspace-prod-02.ist.berkeley.edu/#TENANT#_nuxeo/data/#{l1}/#{l2}/#{x3d_md5}",
+             id: 'x3d_md5',
+             type: 'model/x3d+xml'),
              controls: 'controls',
              style: 'width: 640px;')
       end.join.html_safe
     end
   end
+
 
 end
