@@ -67,7 +67,8 @@ fi
 cd ${current_directory}
 
 echo "Creating new rails app in ${current_directory}/${app_name}..."
-rails new ${app_name} -m https://raw.github.com/projectblacklight/blacklight/master/template.demo.rb > install.log
+echo "Using template: ${source_dir}/template.bl_${tenant}.rb"
+rails new ${app_name} -m ${source_dir}/template.bl_${tenant}.rb > install.log
 
 cd ${source_dir}
 
